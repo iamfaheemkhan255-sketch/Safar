@@ -72,33 +72,55 @@ class Location(BaseModel):
     lng: float
 
 class CreateRideRequest(BaseModel):
-    pickup_name: str
-    pickup_lat: float
-    pickup_lng: float
-    destination_name: str
-    destination_lat: float
-    destination_lng: float
+    pickup_name: Optional[str] = None
+    pickup_lat: Optional[float] = None
+    pickup_lng: Optional[float] = None
+    destination_name: Optional[str] = None
+    destination_lat: Optional[float] = None
+    destination_lng: Optional[float] = None
+    origin_city: Optional[str] = None
+    dest_city: Optional[str] = None
     passenger_name: str = "Passenger"
     passenger_phone: str = "+92 300 1234567"
-    offer_amount: int
+    offer_amount: Optional[int] = None
+    proposed_fare: Optional[int] = None
     vehicle_category: str = "COMFORT"
     passenger_seats: int = 1
     notes: Optional[str] = None
 
 class CreateCaptainTripRequest(BaseModel):
-    origin_name: str
-    origin_lat: float
-    origin_lng: float
-    destination_name: str
-    destination_lat: float
-    destination_lng: float
-    captain_name: str
-    phone: str
-    vehicle: str
-    departure_time: str
+    origin_name: Optional[str] = None
+    origin_lat: Optional[float] = None
+    origin_lng: Optional[float] = None
+    destination_name: Optional[str] = None
+    destination_lat: Optional[float] = None
+    destination_lng: Optional[float] = None
+    origin_city: Optional[str] = None
+    dest_city: Optional[str] = None
+    captain_name: str = "Captain"
+    phone: Optional[str] = None
+    vehicle: Optional[str] = "Toyota Corolla"
+    rating: Optional[float] = 4.9
+    departure_time: str = "Today @ 5:00 PM"
     available_seats: int = 3
-    seat_price: int
+    seat_price: int = 1000
     notes: Optional[str] = None
+
+class CreateBidRequest(BaseModel):
+    captain_id: Optional[str] = "CAP-101"
+    captain_name: str = "Captain"
+    captain_avatar: Optional[str] = None
+    captain_phone: Optional[str] = None
+    phone: Optional[str] = None
+    vehicle: Optional[str] = "Toyota Corolla (SE-412)"
+    rating: Optional[float] = 4.9
+    trips_count: Optional[int] = 1250
+    amount: int
+    eta_mins: Optional[int] = 5
+    distance_km: Optional[float] = 3.2
+
+class AcceptBidRequest(BaseModel):
+    bid_id: str
 
 class CaptainTrip(BaseModel):
     id: str

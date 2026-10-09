@@ -232,13 +232,16 @@ def load_all_rides() -> List[dict]:
         
         accepted_bid = json.loads(r["accepted_bid_json"]) if r["accepted_bid_json"] else None
         
+        pickup_obj = {"name": r["pickup_name"], "lat": r["pickup_lat"], "lng": r["pickup_lng"]}
         ride_dict = {
             "id": r["id"],
-            "pickup": {"name": r["pickup_name"], "lat": r["pickup_lat"], "lng": r["pickup_lng"]},
+            "pickup": pickup_obj,
+            "origin": pickup_obj,
             "destination": {"name": r["destination_name"], "lat": r["destination_lat"], "lng": r["destination_lng"]},
             "passenger_name": r["passenger_name"],
             "passenger_phone": r["passenger_phone"],
             "passenger_offer": r["passenger_offer"],
+            "proposed_fare": r["passenger_offer"],
             "vehicle_category": r["vehicle_category"],
             "passenger_seats": r["passenger_seats"],
             "distance_km": r["distance_km"],

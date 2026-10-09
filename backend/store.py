@@ -119,17 +119,34 @@ class MarketplaceStore:
     def create_ride(self, req: CreateRideRequest) -> dict:
         self.ride_counter += 1
         ride_id = f"RIDE-{self.ride_counter}"
-        
-        dist_km = haversine_distance(req.pickup_lat, req.pickup_lng, req.destination_lat, req.destination_lng)
+
+        pickup_name = req.pickup_name or req.origin_city or "Lahore"
+        dest_name = req.destination_name or req.dest_city or "Islamabad"
+        offer = req.offer_amount if req.offer_amount is not None else (req.proposed_fare if req.proposed_fare is not None else 3000)
+
+        p_coords = PAKISTAN_CITIES.get(pickup_name, {"lat": 31.5204, "lng": 74.3587})
+        d_coords = PAKISTAN_CITIES.get(dest_name, {"lat": 33.6844, "lng": 73.0479})
+
+        pickup_lat = req.pickup_lat if req.pickup_lat is not None else p_coords["lat"]
+        pickup_lng = req.pickup_lng if req.pickup_lng is not None else p_coords["lng"]
+        dest_lat = req.destination_lat if req.destination_lat is not None else d_coords["lat"]
+        dest_lng = req.destination_lng if req.destination_lng is not None else d_coords["lng"]
+
+        dist_km = haversine_distance(pickup_lat, pickup_lng, dest_lat, dest_lng)
         est_duration = max(15, int((dist_km / 65.0) * 60))
+
+        pickup_obj = {"name": pickup_name, "lat": pickup_lat, "lng": pickup_lng}
+        dest_obj = {"name": dest_name, "lat": dest_lat, "lng": dest_lng}
 
         ride_dict = {
             "id": ride_id,
-            "pickup": {"name": req.pickup_name, "lat": req.pickup_lat, "lng": req.pickup_lng},
-            "destination": {"name": req.destination_name, "lat": req.destination_lat, "lng": req.destination_lng},
+            "pickup": pickup_obj,
+            "origin": pickup_obj,
+            "destination": dest_obj,
             "passenger_name": req.passenger_name,
             "passenger_phone": req.passenger_phone,
-            "passenger_offer": req.offer_amount,
+            "passenger_offer": int(offer),
+            "proposed_fare": int(offer),
             "vehicle_category": req.vehicle_category,
             "passenger_seats": req.passenger_seats,
             "distance_km": dist_km,
@@ -148,15 +165,30 @@ class MarketplaceStore:
         self.trip_counter += 1
         trip_id = f"TRIP-{self.trip_counter}"
 
+        origin_name = req.origin_name or req.origin_city or "Lahore"
+        dest_name = req.destination_name or req.dest_city or "Islamabad"
+        phone = req.phone or "+92 300 1234567"
+        vehicle = req.vehicle or "Toyota Corolla"
+
+        o_coords = PAKISTAN_CITIES.get(origin_name, {"lat": 31.4700, "lng": 74.2400})
+        d_coords = PAKISTAN_CITIES.get(dest_name, {"lat": 33.6900, "lng": 73.0300})
+
+        o_lat = req.origin_lat if req.origin_lat is not None else o_coords["lat"]
+        o_lng = req.origin_lng if req.origin_lng is not None else o_coords["lng"]
+        d_lat = req.destination_lat if req.destination_lat is not None else d_coords["lat"]
+        d_lng = req.destination_lng if req.destination_lng is not None else d_coords["lng"]
+
         trip_dict = {
             "id": trip_id,
-            "origin": {"name": req.origin_name, "lat": req.origin_lat, "lng": req.origin_lng},
-            "destination": {"name": req.destination_name, "lat": req.destination_lat, "lng": req.destination_lng},
+            "origin": {"name": origin_name, "lat": o_lat, "lng": o_lng},
+            "destination": {"name": dest_name, "lat": d_lat, "lng": d_lng},
+            "origin_city": origin_name,
+            "dest_city": dest_name,
             "captain_name": req.captain_name,
             "captain_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
-            "phone": req.phone,
-            "vehicle": req.vehicle,
-            "rating": 4.9,
+            "phone": phone,
+            "vehicle": vehicle,
+            "rating": req.rating or 4.9,
             "departure_time": req.departure_time,
             "available_seats": req.available_seats,
             "seat_price": req.seat_price,
@@ -206,6 +238,10 @@ class MarketplaceStore:
         if target_bid:
             ride["status"] = RideStatus.ACCEPTED.value
             ride["accepted_bid"] = target_bid
+            if "origin" not in ride and "pickup" in ride:
+                ride["origin"] = ride["pickup"]
+            if "proposed_fare" not in ride and "passenger_offer" in ride:
+                ride["proposed_fare"] = ride["passenger_offer"]
             save_ride(ride)
             return ride
         return None

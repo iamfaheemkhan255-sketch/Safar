@@ -271,12 +271,76 @@
             color: #0f172a !important;
             background-color: #e2e8f0 !important;
         }
+
+        /* Professional Typography & Layout Fixes */
+        html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.light h6 {
+            color: #0f172a !important;
+        }
+        html.light p {
+            color: #334155 !important;
+        }
+        html.light .font-display {
+            letter-spacing: -0.01em;
+        }
+        html.light .text-emerald-400 {
+            color: #059669 !important;
+        }
+        html.light .text-amber-400 {
+            color: #d97706 !important;
+        }
+        html.light .text-cyan-400 {
+            color: #0891b2 !important;
+        }
+        html.light .text-purple-400 {
+            color: #7c3aed !important;
+        }
+        html.light .text-teal-400 {
+            color: #0d9488 !important;
+        }
+        html.light .text-rose-500, html.light .text-rose-400 {
+            color: #e11d48 !important;
+        }
+        html.light footer h4 {
+            color: #0f172a !important;
+        }
+        html.light footer p,
+        html.light footer li,
+        html.light footer span,
+        html.light footer a,
+        html.light footer button {
+            color: #475569 !important;
+        }
+        html.light footer a:hover,
+        html.light footer button:hover {
+            color: #059669 !important;
+        }
+        html.light footer {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        /* Light mode legal modal text readability */
+        html.light #legalBody p,
+        html.light #legalBody li,
+        html.light #legalBody span {
+            color: #334155 !important;
+        }
+        html.light #legalBody strong {
+            color: #0f172a !important;
+        }
+
+        /* Prevent overlap in guide/info cards */
+        .info-grid-card {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-emerald-500 selection:text-black">
 
     <!-- MAIN WEBSITE ROOT WRAPPER -->
-    <div id="mainRootWrapper" class="min-h-screen flex flex-col justify-between bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
+    <div id="mainRootWrapper" class="min-h-screen flex flex-col justify-start bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
 
         <!-- TOP WEBSITE GLOBAL HEADER & NAVIGATION -->
         <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-8 py-3.5 shadow-2xl">
@@ -317,6 +381,10 @@
                     <button onclick="switchServiceModule('COMMUNITY')" id="svc-COMMUNITY" class="svc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-800">
                         <i class="fas fa-comments text-purple-400"></i>
                         <span>Community Chat</span>
+                    </button>
+                    <button onclick="switchServiceModule('COMPLIANCE')" id="svc-COMPLIANCE" class="svc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-800">
+                        <i class="fas fa-shield-halved text-emerald-400"></i>
+                        <span>Compliance</span>
                     </button>
                 </nav>
 
@@ -415,6 +483,9 @@
                 </button>
                 <button onclick="switchServiceModule('COMMUNITY')" id="m-svc-COMMUNITY" class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300">
                     <i class="fas fa-comments mr-1 text-purple-400"></i> Community
+                </button>
+                <button onclick="switchServiceModule('COMPLIANCE')" id="m-svc-COMPLIANCE" class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300">
+                    <i class="fas fa-shield-halved mr-1 text-emerald-400"></i> Compliance
                 </button>
             </div>
 
@@ -723,7 +794,6 @@
                     </div>
 
                 </div>
-                </div>
 
             </div>
 
@@ -845,203 +915,256 @@
                 </div>
             </div>
 
-            <!-- ========================================================
-                 PUBLIC INFORMATION & SEO CONTENT SECTION (ADSENSE COMPLIANT)
-                 ======================================================== -->
-            <section class="space-y-8 pt-6 border-t border-slate-800/80">
+            <!-- SERVICE MODULE 5: DEDICATED COMPLIANCE & LEGAL TAB -->
+            <div id="module-COMPLIANCE" class="space-y-6 hidden animate-fade-in">
                 
-                <!-- SECTION 1: HOW IT WORKS (3-STEP VISUAL GUIDE) -->
+                <!-- COMPLIANCE BANNER HEADER -->
+                <div class="glass-card p-6 sm:p-8 space-y-3 text-center max-w-3xl mx-auto">
+                    <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full font-mono font-bold uppercase tracking-wider">
+                        <i class="fas fa-shield-halved mr-1"></i> Legal & Regulatory Compliance
+                    </span>
+                    <h2 class="font-display font-black text-2xl sm:text-3xl text-white">Compliance, Safety & Platform Policies</h2>
+                    <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">Official operating framework, consumer protection policies, and motorway safety standards for the Safar mobility marketplace across Pakistan.</p>
+                </div>
+
+                <!-- SECTION 1: OFFICIAL POLICY DOCUMENTS (INTERACTIVE CARDS) -->
+                <div class="glass-card p-6 sm:p-8 space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-2">
+                        <div>
+                            <h3 class="font-display font-black text-lg text-white flex items-center gap-2">
+                                <i class="fas fa-file-contract text-emerald-400"></i> Platform Legal Documents
+                            </h3>
+                            <p class="text-xs text-slate-400">Full disclosure of our terms, privacy protocols, and peer-to-peer standards</p>
+                        </div>
+                        <span class="text-xs bg-slate-900 text-emerald-400 border border-slate-800 px-3 py-1 rounded-full font-mono font-semibold">
+                            Google AdSense Ready
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-emerald-500/40 space-y-3 transition flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <h4 class="font-bold text-white text-sm">Privacy Policy</h4>
+                                <p class="text-[11px] text-slate-300 leading-relaxed">How we collect, store, and protect user credentials under PECA 2016 compliance.</p>
+                            </div>
+                            <button onclick="openLegalModal('PRIVACY')" class="w-full py-2 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                                <span>Read Privacy Policy</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/40 space-y-3 transition flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center text-lg">
+                                    <i class="fas fa-file-signature"></i>
+                                </div>
+                                <h4 class="font-bold text-white text-sm">Terms of Service</h4>
+                                <p class="text-[11px] text-slate-300 leading-relaxed">User agreements, conduct guidelines, and peer-to-peer mobility terms.</p>
+                            </div>
+                            <button onclick="openLegalModal('TERMS')" class="w-full py-2 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                                <span>Read Terms</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-amber-500/40 space-y-3 transition flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-lg">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <h4 class="font-bold text-white text-sm">Safety Guidelines</h4>
+                                <p class="text-[11px] text-slate-300 leading-relaxed">National Highway & Motorway Police standards and emergency helpline 130.</p>
+                            </div>
+                            <button onclick="openLegalModal('SAFETY')" class="w-full py-2 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                                <span>Read Safety Rules</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-purple-500/40 space-y-3 transition flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center text-lg">
+                                    <i class="fas fa-gavel"></i>
+                                </div>
+                                <h4 class="font-bold text-white text-sm">Marketplace Disclaimer</h4>
+                                <p class="text-[11px] text-slate-300 leading-relaxed">Notice of 0% platform commissions and direct cash settlements.</p>
+                            </div>
+                            <button onclick="openLegalModal('DISCLAIMER')" class="w-full py-2 px-3 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/30 text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                                <span>Read Disclaimer</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: HOW IT WORKS (3-STEP VISUAL) -->
                 <div class="glass-card p-6 sm:p-8 space-y-6">
                     <div class="text-center max-w-2xl mx-auto space-y-2">
-                        <span class="text-xs bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-3 py-1 rounded-full font-mono font-bold uppercase tracking-wider">
-                            Transparent Mobility
+                        <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full font-mono font-bold uppercase tracking-wider">
+                            Transparent Marketplace
                         </span>
-                        <h2 class="font-display font-black text-2xl sm:text-3xl text-white">How Safar Fare Bidding & Travel Works</h2>
-                        <p class="text-xs sm:text-sm text-slate-400">A fair, decentralized intercity ride-sharing marketplace connecting passengers and drivers across Pakistan with real-time fare negotiation and zero hidden fees.</p>
+                        <h3 class="font-display font-black text-xl sm:text-2xl text-white">How Safar Fare Bidding Operates</h3>
+                        <p class="text-xs sm:text-sm text-slate-300">Decentralized intercity travel connecting passengers and drivers across Pakistan with real-time negotiation and 0% deductions.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3 relative">
+                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
                             <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-display font-black text-lg">
                                 1
                             </div>
-                            <h3 class="font-display font-bold text-base text-white">Post Your Route & Fare</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">Passengers choose departure and arrival cities, select vehicle category, and propose their desired fare based on recommended distance rates.</p>
+                            <h4 class="font-display font-bold text-base text-white">Post Route & Fare</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">Passengers choose departure and arrival cities, select vehicle category, and propose their desired fare based on recommended rates.</p>
                         </div>
 
-                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3 relative">
+                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
                             <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-display font-black text-lg">
                                 2
                             </div>
-                            <h3 class="font-display font-bold text-base text-white">Receive Live Counter-Bids</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">Captains traveling along that motorway route view the request instantly via WebSockets and submit competitive counter-offers or accept your proposed fare.</p>
+                            <h4 class="font-display font-bold text-base text-white">Receive Live Counter-Bids</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">Captains traveling along that motorway route view the request in real time via WebSockets and submit counter-bids or accept your fare.</p>
                         </div>
 
-                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3 relative">
+                        <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
                             <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-display font-black text-lg">
                                 3
                             </div>
-                            <h3 class="font-display font-bold text-base text-white">Confirm, Travel & Pay Direct</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">Review captain ratings, vehicle model, and reviews. Choose the best offer and settle payment directly in cash with zero middleman commissions.</p>
+                            <h4 class="font-display font-bold text-base text-white">Confirm & Settle Direct</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">Review captain ratings and vehicle details. Confirm your ride and settle the fare directly with zero platform cuts or middleman charges.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- SECTION 2: TOP INTERCITY MOTORWAYS & ROUTES IN PAKISTAN -->
+                <!-- SECTION 3: SAFETY STANDARDS & HIGHWAY PATROL -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="glass-card p-6 space-y-4">
                         <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
-                            <i class="fas fa-route text-emerald-400 text-lg"></i>
-                            <h3 class="font-display font-bold text-base text-white">Popular Motorway Routes Across Pakistan</h3>
+                            <i class="fas fa-shield-halved text-emerald-400 text-lg"></i>
+                            <h3 class="font-display font-bold text-base text-white">Safety Protocols & Captain Vetting</h3>
                         </div>
-                        <div class="space-y-3 text-xs">
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/50 border border-slate-800/80">
-                                <span class="font-semibold text-white">M-2: Lahore ⇄ Islamabad / Rawalpindi</span>
-                                <span class="font-mono text-emerald-400 font-bold">~375 km • 4.5 hrs</span>
-                            </div>
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/50 border border-slate-800/80">
-                                <span class="font-semibold text-white">M-9: Karachi ⇄ Hyderabad</span>
-                                <span class="font-mono text-emerald-400 font-bold">~160 km • 2.0 hrs</span>
-                            </div>
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/50 border border-slate-800/80">
-                                <span class="font-semibold text-white">M-1: Islamabad ⇄ Peshawar</span>
-                                <span class="font-mono text-emerald-400 font-bold">~180 km • 2.2 hrs</span>
-                            </div>
-                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/50 border border-slate-800/80">
-                                <span class="font-semibold text-white">M-3/M-4: Lahore ⇄ Faisalabad ⇄ Multan</span>
-                                <span class="font-mono text-emerald-400 font-bold">~340 km • 4.0 hrs</span>
-                            </div>
-                        </div>
+                        <ul class="space-y-3 text-xs text-slate-300">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-id-card text-emerald-400 mt-0.5 text-sm"></i>
+                                <div>
+                                    <strong class="text-white block">CNIC & Vehicle Plate Registration:</strong>
+                                    <span>Captains register their computerized national identity card (CNIC) and vehicle number plate for accountability.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-percent text-amber-400 mt-0.5 text-sm"></i>
+                                <div>
+                                    <strong class="text-white block">Zero Platform Commissions:</strong>
+                                    <span>100% of the agreed fare remains with the captain. No surge multipliers or arbitrary commission deductions.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-star text-yellow-400 mt-0.5 text-sm"></i>
+                                <div>
+                                    <strong class="text-white block">Mutual Rating System:</strong>
+                                    <span>Every completed ride features mutual passenger-captain ratings ensuring community reliability.</span>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
 
                     <div class="glass-card p-6 space-y-4">
                         <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
-                            <i class="fas fa-shield-halved text-cyan-400 text-lg"></i>
-                            <h3 class="font-display font-bold text-base text-white">Platform Guarantees & Safety Standards</h3>
+                            <i class="fas fa-phone-alt text-rose-400 text-lg"></i>
+                            <h3 class="font-display font-bold text-base text-white">Highway Emergency & Motorway Police</h3>
                         </div>
-                        <ul class="space-y-2.5 text-xs text-slate-300">
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check-circle text-emerald-400 mt-0.5"></i>
-                                <span><strong>CNIC & License Verified Captains:</strong> Driver identities and vehicle registration documents are checked before route publishing.</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check-circle text-emerald-400 mt-0.5"></i>
-                                <span><strong>0% Commission Policy:</strong> 100% of the agreed fare goes directly to the driver with no surge pricing or hidden deductions.</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check-circle text-emerald-400 mt-0.5"></i>
-                                <span><strong>Live Trip Tracking & SOS:</strong> Emergency contact integration with National Highway & Motorway Police (130).</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check-circle text-emerald-400 mt-0.5"></i>
-                                <span><strong>Fair Rating Ecosystem:</strong> Mutual rating and feedback system after every trip ensures safety and accountability.</span>
-                            </li>
-                        </ul>
+                        <div class="space-y-3 text-xs text-slate-300">
+                            <div class="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <span class="font-bold text-rose-300 block text-sm">National Highway & Motorway Police</span>
+                                    <span class="text-rose-400 font-medium">Helpline 130 (24/7 Rapid Response)</span>
+                                </div>
+                                <a href="tel:130" class="px-3 py-1.5 rounded-lg bg-rose-500 text-white font-bold text-xs hover:bg-rose-400 transition">Call 130</a>
+                            </div>
+                            <p class="leading-relaxed">In case of any vehicle breakdown, mechanical distress, or emergency on Pakistan motorways (M-1, M-2, M-3, M-4, M-5, M-9), contact NHMP immediately.</p>
+                            <div class="pt-1 flex items-center gap-2 text-slate-400">
+                                <i class="fas fa-map-marker-alt text-cyan-400"></i>
+                                <span>Always verify vehicle number plate before boarding.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- SECTION 3: FREQUENTLY ASKED QUESTIONS (FAQ) -->
+                <!-- SECTION 4: FREQUENTLY ASKED QUESTIONS -->
                 <div class="glass-card p-6 sm:p-8 space-y-6">
                     <div class="text-center max-w-xl mx-auto space-y-1">
                         <h3 class="font-display font-black text-xl text-white">Frequently Asked Questions</h3>
-                        <p class="text-xs text-slate-400">Everything you need to know about using the Safar Mobility Platform</p>
+                        <p class="text-xs text-slate-400">Common questions about fares, safety, and our platform rules</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                         <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-1.5">
                             <h4 class="font-bold text-white text-sm">Is Safar free to use?</h4>
-                            <p class="text-slate-400 leading-relaxed">Yes! Registering an account, broadcasting ride requests, and bidding are 100% free. Passengers pay the agreed fare directly to the driver with zero booking fees or platform commissions.</p>
+                            <p class="text-slate-300 leading-relaxed">Yes! Registering an account, broadcasting ride requests, and bidding are 100% free. Passengers pay the agreed fare directly to the driver with zero booking fees or platform commissions.</p>
                         </div>
 
                         <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-1.5">
                             <h4 class="font-bold text-white text-sm">How does the fare bidding process work?</h4>
-                            <p class="text-slate-400 leading-relaxed">When a passenger requests a ride, they propose a fare based on distance. Captains traveling that route can accept the offer or submit a counter-bid. The passenger chooses the bid that best fits their budget and schedule.</p>
+                            <p class="text-slate-300 leading-relaxed">When a passenger requests a ride, they propose a fare based on distance. Captains traveling that route can accept the offer or submit a counter-bid. The passenger chooses the bid that best fits their budget and schedule.</p>
                         </div>
 
                         <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-1.5">
                             <h4 class="font-bold text-white text-sm">How are captain accounts verified?</h4>
-                            <p class="text-slate-400 leading-relaxed">Captains must submit their full legal name, phone number, vehicle registration plate, and CNIC number during registration to ensure trust and security across our network.</p>
+                            <p class="text-slate-300 leading-relaxed">Captains submit their full legal name, phone number, vehicle registration plate, and CNIC number during registration to ensure trust and security across our network.</p>
                         </div>
 
                         <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-1.5">
                             <h4 class="font-bold text-white text-sm">What should I do in an emergency on the highway?</h4>
-                            <p class="text-slate-400 leading-relaxed">During any active trip, click the "SOS Emergency" button inside the tracking modal to contact the National Highway & Motorway Police directly via emergency helpline 130.</p>
+                            <p class="text-slate-300 leading-relaxed">During any active trip, click the "SOS Emergency" button inside the tracking modal to contact the National Highway & Motorway Police directly via emergency helpline 130.</p>
                         </div>
                     </div>
                 </div>
 
-            </section>
+                <!-- SECTION 5: ABOUT SAFAR TECHNOLOGIES & LEGAL FOOTER (CONTAINED ONLY IN THIS TAB) -->
+                <div class="glass-card p-6 sm:p-8 space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-display font-black text-black text-lg">
+                            س
+                        </div>
+                        <div>
+                            <h3 class="font-display font-bold text-base text-white">Safar Technologies Pakistan</h3>
+                            <p class="text-[11px] text-slate-400">Headquarters in Lahore & Islamabad • <a href="mailto:support@safar.pk" class="text-emerald-400 hover:underline">support@safar.pk</a></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+                        <div class="p-4 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-1">
+                            <h4 class="font-bold text-white text-sm flex items-center gap-2"><i class="fas fa-bullseye text-emerald-400"></i> Mission</h4>
+                            <p class="leading-relaxed">Make intercity mobility across Pakistan affordable, fair, and reliable without expensive corporate middleman fees.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-1">
+                            <h4 class="font-bold text-white text-sm flex items-center gap-2"><i class="fas fa-shield-alt text-amber-400"></i> Compliance</h4>
+                            <p class="leading-relaxed">Compliant with Pakistani data protection regulations and motorways road safety guidelines.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-1">
+                            <h4 class="font-bold text-white text-sm flex items-center gap-2"><i class="fas fa-envelope text-cyan-400"></i> Contact</h4>
+                            <p class="leading-relaxed">Official support inquiries: <a href="mailto:support@safar.pk" class="text-emerald-400 font-semibold hover:underline">support@safar.pk</a>.<br>Emergency: NHMP 130.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+                        <p>© 2026 Safar Technologies Pakistan. All rights reserved.</p>
+                        <div class="flex items-center space-x-4">
+                            <button onclick="openLegalModal('PRIVACY')" class="hover:text-emerald-400 transition">Privacy Policy</button>
+                            <span>•</span>
+                            <button onclick="openLegalModal('TERMS')" class="hover:text-cyan-400 transition">Terms of Service</button>
+                            <span>•</span>
+                            <button onclick="openLegalModal('SAFETY')" class="hover:text-amber-400 transition">Safety Standards</button>
+                            <span>•</span>
+                            <button onclick="openLegalModal('DISCLAIMER')" class="hover:text-purple-400 transition">Disclaimer</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
         </main>
-
-        <!-- COMPREHENSIVE COMPLIANCE & ACCESSIBLE FOOTER (GOOGLE ADSENSE READY) -->
-        <footer class="bg-slate-950 border-t border-slate-800/80 px-4 sm:px-8 py-10 mt-12">
-            <div class="max-w-7xl mx-auto space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-xs text-slate-400">
-                    
-                    <!-- Col 1: Brand & Description -->
-                    <div class="space-y-3 md:col-span-1">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-display font-black text-black text-lg">
-                                س
-                            </div>
-                            <span class="font-display font-black text-lg text-white">سفر Safar</span>
-                        </div>
-                        <p class="text-slate-400 leading-relaxed">Pakistan's community-driven intercity mobility & live fare bidding marketplace. Connecting travelers across provincial motorways with zero commission.</p>
-                        <div class="flex items-center space-x-3 text-slate-400 text-sm pt-1">
-                            <span class="text-[11px] font-mono text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> Verified Network</span>
-                            <span class="text-slate-700">•</span>
-                            <span class="text-[11px] font-mono text-amber-400 font-bold"><i class="fas fa-bolt"></i> Real-Time WS</span>
-                        </div>
-                    </div>
-
-                    <!-- Col 2: Services -->
-                    <div class="space-y-2.5">
-                        <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider">Mobility Services</h4>
-                        <ul class="space-y-2">
-                            <li><a href="javascript:void(0)" onclick="switchServiceModule('INTERCITY')" class="hover:text-emerald-400 transition">Intercity Fare Bidding</a></li>
-                            <li><a href="javascript:void(0)" onclick="switchServiceModule('INTERCITY')" class="hover:text-emerald-400 transition">Captain Scheduled Carpools</a></li>
-                            <li><a href="javascript:void(0)" onclick="switchServiceModule('OFFICE')" class="hover:text-emerald-400 transition">Daily Office Commutes</a></li>
-                            <li><a href="javascript:void(0)" onclick="switchServiceModule('COMMUNITY')" class="hover:text-emerald-400 transition">Motorway Highway Forum</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Col 3: Legal & Compliance (Mandatory for Google AdSense) -->
-                    <div class="space-y-2.5">
-                        <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider">Legal & Compliance</h4>
-                        <ul class="space-y-2">
-                            <li><button onclick="openLegalModal('PRIVACY')" class="hover:text-emerald-400 transition text-left">Privacy Policy</button></li>
-                            <li><button onclick="openLegalModal('TERMS')" class="hover:text-emerald-400 transition text-left">Terms of Service</button></li>
-                            <li><button onclick="openLegalModal('SAFETY')" class="hover:text-emerald-400 transition text-left">Safety Guidelines & Community Standards</button></li>
-                            <li><button onclick="openLegalModal('DISCLAIMER')" class="hover:text-emerald-400 transition text-left">Zero Commission Disclaimer</button></li>
-                        </ul>
-                    </div>
-
-                    <!-- Col 4: Contact & Support -->
-                    <div class="space-y-2.5">
-                        <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider">Support & Contact</h4>
-                        <ul class="space-y-2">
-                            <li><button onclick="openLegalModal('ABOUT')" class="hover:text-emerald-400 transition text-left">About Safar Technologies</button></li>
-                            <li><a href="mailto:support@safar.pk" class="hover:text-emerald-400 transition flex items-center gap-1.5"><i class="fas fa-envelope"></i> support@safar.pk</a></li>
-                            <li class="flex items-center gap-1.5"><i class="fas fa-phone-alt text-emerald-400"></i> NHMP Emergency: 130</li>
-                            <li class="flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-amber-400"></i> Lahore & Islamabad, Pakistan</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Bottom Copyright Strip -->
-                <div class="pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-                    <p>© 2026 Safar Technologies Pakistan. All rights reserved. Peer-to-peer mobility network.</p>
-                    <div class="flex items-center space-x-4">
-                        <button onclick="openLegalModal('PRIVACY')" class="hover:text-slate-400 transition">Privacy</button>
-                        <span>•</span>
-                        <button onclick="openLegalModal('TERMS')" class="hover:text-slate-400 transition">Terms</button>
-                        <span>•</span>
-                        <button onclick="openLegalModal('ABOUT')" class="hover:text-slate-400 transition">About</button>
-                    </div>
-                </div>
-            </div>
-        </footer>
 
     </div>
 
@@ -1375,18 +1498,26 @@
                 (data.captain_trips || []).forEach(t => captainTripsState[t.id] = t);
                 renderAll();
             } 
-            else if (data.type === 'NEW_RIDE_REQUEST') {
+            else if (data.type === 'NEW_RIDE_REQUEST' || data.type === 'RIDE_CREATED') {
                 ridesState[data.ride.id] = data.ride;
                 playChimeNewRide();
-                showToast(`New Ride Request! ${data.ride.origin.name} ➔ ${data.ride.destination.name}`, 'fa-paper-plane');
+                const orig = data.ride?.origin?.name || data.ride?.pickup?.name || 'Origin';
+                const dest = data.ride?.destination?.name || 'Destination';
+                showToast(`New Ride Request! ${orig} ➔ ${dest}`, 'fa-paper-plane');
                 renderAll();
             }
-            else if (data.type === 'NEW_BID') {
+            else if (data.type === 'NEW_BID' || data.type === 'BID_RECEIVED') {
                 if (ridesState[data.ride_id]) {
-                    ridesState[data.ride_id].bids.push(data.bid);
+                    if (!ridesState[data.ride_id].bids) {
+                        ridesState[data.ride_id].bids = [];
+                    }
+                    if (!ridesState[data.ride_id].bids.some(b => b.id === data.bid.id)) {
+                        ridesState[data.ride_id].bids.push(data.bid);
+                    }
+                    ridesState[data.ride_id].status = 'BIDDING';
                 }
                 playChimeNewBid();
-                showToast(`Counter-Bid Received from ${data.bid.captain_name}: PKR ${data.bid.amount}`, 'fa-hand-holding-usd');
+                showToast(`Counter-Bid from ${data.bid.captain_name}: PKR ${data.bid.amount}`, 'fa-hand-holding-usd');
                 renderAll();
             }
             else if (data.type === 'BID_ACCEPTED') {
@@ -1403,9 +1534,11 @@
                     updateTrackingModalStatus(data.ride);
                 }
             }
-            else if (data.type === 'NEW_CAPTAIN_TRIP') {
+            else if (data.type === 'NEW_CAPTAIN_TRIP' || data.type === 'CAPTAIN_TRIP_CREATED') {
                 captainTripsState[data.trip.id] = data.trip;
-                showToast(`New Captain Route: ${data.trip.origin.name} ➔ ${data.trip.destination.name}`, 'fa-car-side');
+                const orig = data.trip?.origin?.name || data.trip?.origin_city || 'Origin';
+                const dest = data.trip?.destination?.name || data.trip?.dest_city || 'Destination';
+                showToast(`New Captain Route: ${orig} ➔ ${dest}`, 'fa-car-side');
                 renderAll();
             }
         }
@@ -1728,11 +1861,14 @@
                 if (!activeRide) {
                     container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">No active request broadcasted yet.</p>`;
                 } else {
+                    const origName = activeRide.origin?.name || activeRide.pickup?.name || 'Origin';
+                    const destName = activeRide.destination?.name || 'Destination';
+                    const fare = activeRide.proposed_fare || activeRide.passenger_offer || 0;
                     container.innerHTML = `
                         <div class="p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-2xl text-center space-y-1.5 animate-pulse">
                             <span class="text-xs text-emerald-400 font-mono font-bold">${activeRide.id}</span>
-                            <h4 class="text-sm font-bold text-white">${activeRide.origin.name} ➔ ${activeRide.destination.name}</h4>
-                            <p class="text-xs text-emerald-400 font-mono font-bold">Proposed Offer: PKR ${activeRide.proposed_fare}</p>
+                            <h4 class="text-sm font-bold text-white">${origName} ➔ ${destName}</h4>
+                            <p class="text-xs text-emerald-400 font-mono font-bold">Proposed Offer: PKR ${fare}</p>
                             <p class="text-[11px] text-slate-400">Broadcasting live to captains across Pakistan... Counter-bids will appear here in real-time.</p>
                         </div>
                     `;
@@ -1742,14 +1878,16 @@
 
             badge.innerText = `${activeRide.bids.length} Bids`;
 
-            container.innerHTML = activeRide.bids.map(b => `
+            container.innerHTML = activeRide.bids.map(b => {
+                const timeStr = b.timestamp ? (b.timestamp.includes('T') ? b.timestamp.split('T')[1].split('.')[0] : b.timestamp) : '';
+                return `
                 <div class="p-3.5 bg-slate-950 border border-emerald-900/50 rounded-2xl flex items-center justify-between shadow-md">
                     <div class="flex items-center space-x-3">
-                        <img src="${b.captain_avatar}" class="w-10 h-10 rounded-full border-2 border-emerald-400 object-cover">
+                        <img src="${b.captain_avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80'}" class="w-10 h-10 rounded-full border-2 border-emerald-400 object-cover">
                         <div>
                             <h4 class="text-xs font-bold text-white">${b.captain_name} <span class="text-amber-400 text-[10px]">★ ${b.rating}</span></h4>
                             <p class="text-[10px] text-slate-400">${b.vehicle}</p>
-                            <p class="text-[9px] text-slate-500 font-mono">${b.timestamp.split('T')[1].split('.')[0]}</p>
+                            <p class="text-[9px] text-slate-500 font-mono">${timeStr}</p>
                         </div>
                     </div>
                     <div class="text-right">
@@ -1759,19 +1897,24 @@
                         </button>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function renderCaptainFeed() {
             const container = document.getElementById('captainFeedList');
-            const rides = Object.values(ridesState).filter(r => r.status === 'SEARCHING');
+            const rides = Object.values(ridesState).filter(r => r.status === 'SEARCHING' || r.status === 'OPEN' || r.status === 'BIDDING');
 
             if (!rides || rides.length === 0) {
                 container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6 col-span-full">No active passenger fare requests in radar feed.</p>`;
                 return;
             }
 
-            container.innerHTML = rides.map(r => `
+            container.innerHTML = rides.map(r => {
+                const origName = r.origin?.name || r.pickup?.name || 'Origin';
+                const destName = r.destination?.name || 'Destination';
+                const fare = r.proposed_fare || r.passenger_offer || 0;
+                return `
                 <div class="p-4 bg-slate-950 border border-amber-900/50 rounded-2xl space-y-3 shadow-md flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between border-b border-slate-900 pb-2">
@@ -1779,23 +1922,24 @@
                             <span class="text-[10px] bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800/50 font-semibold">${r.vehicle_category}</span>
                         </div>
                         <div class="mt-2 space-y-0.5">
-                            <h4 class="text-sm font-bold text-white">${r.origin.name} ➔ ${r.destination.name}</h4>
+                            <h4 class="text-sm font-bold text-white">${origName} ➔ ${destName}</h4>
                             <p class="text-xs text-slate-300">Passenger: <span class="font-bold text-white">${r.passenger_name}</span></p>
-                            <div class="text-xs font-mono font-extrabold text-emerald-400">Passenger Offer: PKR ${r.proposed_fare}</div>
+                            <div class="text-xs font-mono font-extrabold text-emerald-400">Passenger Offer: PKR ${fare}</div>
                         </div>
                     </div>
 
                     <div class="bg-black/50 p-2.5 rounded-xl border border-slate-800 space-y-2">
                         <label class="text-[10px] text-slate-400 font-medium block">Submit Counter-Bid (PKR)</label>
                         <div class="flex space-x-2">
-                            <input id="bidInput-${r.id}" type="number" value="${r.proposed_fare}" step="50" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1 text-xs text-emerald-400 font-bold focus:outline-none">
+                            <input id="bidInput-${r.id}" type="number" value="${fare}" step="50" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1 text-xs text-emerald-400 font-bold focus:outline-none">
                             <button onclick="submitCaptainBid('${r.id}')" class="bg-amber-500 hover:bg-amber-400 text-black font-extrabold px-3 py-1 rounded-xl text-xs transition active:scale-95 shrink-0">
                                 Counter-Bid
                             </button>
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function showTrackingModal(ride) {
@@ -2192,7 +2336,7 @@
 
         function switchServiceModule(modId) {
             activeModule = modId;
-            const modules = ['INTERCITY', 'INTRACITY', 'OFFICE', 'COMMUNITY'];
+            const modules = ['INTERCITY', 'INTRACITY', 'OFFICE', 'COMMUNITY', 'COMPLIANCE'];
 
             modules.forEach(m => {
                 const modEl = document.getElementById(`module-${m}`);

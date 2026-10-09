@@ -8,8 +8,12 @@ from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 
 import uuid
+from typing import Optional, List, Dict
 from datetime import datetime
-from backend.models import CreateRideRequest, CreateCaptainTripRequest, SignupRequest, LoginRequest
+from backend.models import (
+    CreateRideRequest, CreateCaptainTripRequest, SignupRequest, LoginRequest,
+    CreateBidRequest, AcceptBidRequest
+)
 from backend.database import (
     hash_password, verify_password, create_user_in_db,
     get_user_by_identifier, get_user_by_id
@@ -121,6 +125,10 @@ def get_captain_trips():
 async def create_captain_trip(req: CreateCaptainTripRequest):
     trip = store.create_captain_trip(req)
     await manager.broadcast({
+        "type": "NEW_CAPTAIN_TRIP",
+        "trip": trip
+    })
+    await manager.broadcast({
         "type": "CAPTAIN_TRIP_CREATED",
         "trip": trip
     })
@@ -129,6 +137,10 @@ async def create_captain_trip(req: CreateCaptainTripRequest):
 @app.post("/api/rides")
 async def create_ride(req: CreateRideRequest, background_tasks: BackgroundTasks):
     ride = store.create_ride(req)
+    await manager.broadcast({
+        "type": "NEW_RIDE_REQUEST",
+        "ride": ride
+    })
     await manager.broadcast({
         "type": "RIDE_CREATED",
         "ride": ride
@@ -139,42 +151,51 @@ async def create_ride(req: CreateRideRequest, background_tasks: BackgroundTasks)
     return ride
 
 @app.post("/api/rides/{ride_id}/bid")
-async def submit_bid(ride_id: str, captain_name: str = "Captain Tariq", vehicle: str = "Toyota Corolla", amount: int = 3000):
+async def submit_bid(ride_id: str, req: CreateBidRequest):
+    phone = req.captain_phone or req.phone or "+92 300 9988776"
+    avatar = req.captain_avatar or "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
     bid = store.add_bid(
         ride_id=ride_id,
-        captain_name=captain_name,
-        captain_avatar="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
-        phone="+92 300 9988776",
-        vehicle=vehicle,
-        rating=4.9,
-        trips_count=1250,
-        amount=amount,
-        eta_mins=5,
-        distance_km=2.4
+        captain_name=req.captain_name or "Captain",
+        captain_avatar=avatar,
+        phone=phone,
+        vehicle=req.vehicle or "Toyota Corolla",
+        rating=float(req.rating or 4.9),
+        trips_count=int(req.trips_count or 1250),
+        amount=int(req.amount),
+        eta_mins=int(req.eta_mins or 5),
+        distance_km=float(req.distance_km or 2.4)
     )
     if not bid:
         raise HTTPException(status_code=404, detail="Ride not found")
 
     ride = store.get_ride(ride_id)
-    await manager.broadcast({
-        "type": "BID_RECEIVED",
+    msg = {
+        "type": "NEW_BID",
         "ride_id": ride_id,
         "bid": bid,
         "all_bids": ride["bids"],
         "ride": ride
-    })
+    }
+    await manager.broadcast(msg)
+    await manager.broadcast({**msg, "type": "BID_RECEIVED"})
     return bid
 
 @app.post("/api/rides/{ride_id}/accept")
-async def accept_bid(ride_id: str, bid_id: str, background_tasks: BackgroundTasks):
-    ride = store.accept_bid(ride_id, bid_id)
+@app.post("/api/rides/{ride_id}/accept-bid")
+async def accept_bid(ride_id: str, background_tasks: BackgroundTasks, req: Optional[AcceptBidRequest] = None, bid_id: Optional[str] = None):
+    target_bid_id = (req.bid_id if req else None) or bid_id
+    if not target_bid_id:
+        raise HTTPException(status_code=400, detail="bid_id is required")
+
+    ride = store.accept_bid(ride_id, target_bid_id)
     if not ride:
         raise HTTPException(status_code=404, detail="Ride or Bid not found")
 
     await manager.broadcast({
         "type": "BID_ACCEPTED",
         "ride_id": ride_id,
-        "bid_id": bid_id,
+        "bid_id": target_bid_id,
         "ride": ride
     })
 
