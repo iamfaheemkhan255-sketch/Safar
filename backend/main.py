@@ -33,6 +33,8 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
 # --- HEALTH CHECK FOR CLOUD DEPLOYMENT ---
 
 @app.get("/health")
