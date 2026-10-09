@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Safar - Real-Time Intercity Ride-Sharing & Fare Marketplace</title>
+
+    <!-- Theme Initializer (Defaults to Light, remembers preference) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('safar_theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+            }
+        })();
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        safar: {
+                            bg: '#080c14',
+                            card: '#0f172a',
+                            border: '#1e293b',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            cyan: '#06b6d4',
+                            purple: '#8b5cf6',
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'fade-in': 'fadeIn 0.25s ease-out',
+                        'toast': 'toastIn 0.3s ease-out',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(16, 185, 129, 0.4)' },
+                            '50%': { boxShadow: '0 0 25px rgba(16, 185, 129, 0.8)' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        toastIn: {
+                            '0%': { transform: 'translateY(-20px) scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* Base Dark Theme (Default CSS Variables) */
+        body {
+            background-color: #080c14;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+        }
+        .glass-card-glow {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.12);
+        }
+        .glass-card-amber {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.12);
+        }
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+        /* ========================================================
+           LIGHT MODE STYLES (CLEAN, BRIGHT & CONTEMPORARY)
+           ======================================================== */
+        html.light body {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+        }
+
+        html.light #mainRootWrapper {
+            background: radial-gradient(ellipse at top, #eef2f6 0%, #f8fafc 50%, #ffffff 100%) !important;
+        }
+
+        html.light header {
+            background: rgba(255, 255, 255, 0.92) !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        html.light footer {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        html.light .glass-card {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.04), 0 2px 6px -2px rgba(0, 0, 0, 0.02) !important;
+        }
+
+        html.light .glass-card-glow {
+            background: #ffffff !important;
+            border: 1.5px solid rgba(16, 185, 129, 0.45) !important;
+            box-shadow: 0 10px 25px -4px rgba(16, 185, 129, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.03) !important;
+        }
+
+        html.light .glass-card-amber {
+            background: #ffffff !important;
+            border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
+            box-shadow: 0 10px 25px -4px rgba(245, 158, 11, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.03) !important;
+        }
+
+        /* Light Mode Surface Containers */
+        html.light .bg-slate-950,
+        html.light .bg-slate-950\/90,
+        html.light .bg-slate-950\/95 {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        html.light .bg-slate-900,
+        html.light .bg-slate-900\/80,
+        html.light .bg-slate-900\/90,
+        html.light .bg-slate-900\/60 {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        html.light .bg-black,
+        html.light .bg-black\/50,
+        html.light .bg-black\/40 {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+
+        /* Light Mode Typography */
+        html.light .text-white {
+            color: #0f172a !important;
+        }
+        html.light .text-slate-200,
+        html.light .text-slate-300 {
+            color: #334155 !important;
+        }
+        html.light .text-slate-400,
+        html.light .text-slate-500 {
+            color: #64748b !important;
+        }
+
+        /* Light Mode Borders */
+        html.light .border-slate-800,
+        html.light .border-slate-800\/80,
+        html.light .border-slate-700,
+        html.light .border-slate-700\/80,
+        html.light .border-slate-900 {
+            border-color: #e2e8f0 !important;
+        }
+
+        /* Light Mode Inputs, Selects & Textareas */
+        html.light input,
+        html.light select,
+        html.light textarea {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+        html.light input:focus,
+        html.light select:focus,
+        html.light textarea:focus {
+            border-color: #10b981 !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15) !important;
+        }
+        html.light input::placeholder,
+        html.light textarea::placeholder {
+            color: #94a3b8 !important;
+        }
+
+        /* Light Mode Pill Badges */
+        html.light .bg-emerald-950,
+        html.light .bg-emerald-950\/30,
+        html.light .bg-emerald-950\/60 {
+            background-color: #ecfdf5 !important;
+            border-color: #a7f3d0 !important;
+            color: #047857 !important;
+        }
+        html.light .bg-amber-950,
+        html.light .bg-amber-950\/30,
+        html.light .bg-amber-950\/50 {
+            background-color: #fffbeb !important;
+            border-color: #fde68a !important;
+            color: #b45309 !important;
+        }
+        html.light .bg-teal-950 {
+            background-color: #f0fdfa !important;
+            border-color: #99f6e4 !important;
+            color: #0f766e !important;
+        }
+        html.light .bg-rose-950\/60,
+        html.light .bg-rose-950 {
+            background-color: #fff1f2 !important;
+            border-color: #fecdd3 !important;
+            color: #be123c !important;
+        }
+
+        /* Modals & Popovers in Light Mode */
+        html.light #authModal,
+        html.light #trackingModal {
+            background-color: rgba(15, 23, 42, 0.5) !important;
+        }
+        html.light #profileDropdown {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 20px 40px -4px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        /* Hover transitions */
+        html.light .svc-tab-btn.text-slate-400:hover,
+        html.light .nav-tab.text-slate-400:hover {
+            color: #0f172a !important;
+            background-color: #e2e8f0 !important;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-500 selection:text-black">
+
+    <!-- MAIN WEBSITE ROOT WRAPPER -->
+    <div id="mainRootWrapper" class="min-h-screen flex flex-col justify-between bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
+
+        <!-- TOP WEBSITE GLOBAL HEADER & NAVIGATION -->
+        <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-8 py-3.5 shadow-2xl">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                
+                <!-- BRAND LOGO & TITLE -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 flex items-center justify-center font-display font-black text-black text-2xl shadow-lg shadow-emerald-500/25 cursor-pointer active:scale-95 transition">
+                        س
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2.5">
+                            <span class="font-display font-black text-xl text-white tracking-wide">سفر Safar</span>
+                            <span id="roleHeaderBadge" class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-0.5 rounded-full font-mono font-bold">
+                                PASSENGER
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-medium hidden sm:block">Real-Time Mobility & Live Bidding Marketplace</p>
+                    </div>
+                </div>
+
+                <!-- DESKTOP TOP SERVICE NAVIGATION MODULES -->
+                <nav class="hidden md:flex items-center space-x-1 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800/80">
+                    <button onclick="switchServiceModule('INTERCITY')" id="svc-INTERCITY" class="svc-tab-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-emerald-500 text-black shadow-md">
+                        <i class="fas fa-route"></i>
+                        <span>Intercity Bidding</span>
+                    </button>
+                    <button onclick="switchServiceModule('INTRACITY')" id="svc-INTRACITY" class="svc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-800">
+                        <i class="fas fa-city"></i>
+                        <span>City Rides</span>
+                        <span class="text-[9px] bg-cyan-950 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-800/50">Soon</span>
+                    </button>
+                    <button onclick="switchServiceModule('OFFICE')" id="svc-OFFICE" class="svc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-800">
+                        <i class="fas fa-building text-amber-400"></i>
+                        <span>Office Routes</span>
+                        <span class="text-[9px] bg-amber-950 text-amber-400 px-1.5 py-0.5 rounded border border-amber-800/50">Fixed</span>
+                    </button>
+                    <button onclick="switchServiceModule('COMMUNITY')" id="svc-COMMUNITY" class="svc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-800">
+                        <i class="fas fa-comments text-purple-400"></i>
+                        <span>Community Chat</span>
+                    </button>
+                </nav>
+
+                <!-- RIGHT CONTROLS: ROLE SWITCHER, LIVE BADGE, SOUND -->
+                <div class="flex items-center space-x-3">
+                    
+                    <!-- USER PROFILE / AUTH BUTTON (NO SWITCH TOGGLE) -->
+                    <div id="headerAuthContainer" class="relative">
+                        <!-- Logged Out State Button -->
+                        <button id="loginTriggerBtn" onclick="openAuthModal('LOGIN')" class="hidden px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-black transition flex items-center space-x-2 shadow-md active:scale-95">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Sign In</span>
+                        </button>
+
+                        <!-- Logged In Profile Pill & Dropdown -->
+                        <div id="userProfilePill" class="flex items-center space-x-2 bg-slate-900 border border-slate-800 hover:border-slate-700 py-1 px-2 rounded-2xl cursor-pointer transition select-none" onclick="toggleProfileDropdown()">
+                            <img id="headerUserAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80" class="w-7 h-7 rounded-full object-cover border border-emerald-500/50">
+                            <div class="hidden sm:block text-left leading-tight pr-1">
+                                <div id="headerUserName" class="text-xs font-bold text-white max-w-[110px] truncate">Faheem Khan</div>
+                                <div id="headerUserRole" class="text-[10px] text-emerald-400 font-mono font-semibold">PASSENGER</div>
+                            </div>
+                            <i class="fas fa-chevron-down text-[9px] text-slate-400 pl-0.5"></i>
+                        </div>
+
+                        <!-- PROFILE DROPDOWN MENU -->
+                        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-2xl border border-slate-800 rounded-2xl shadow-2xl p-4 z-50 animate-slide-up space-y-3">
+                            <div class="flex items-center space-x-3 pb-3 border-b border-slate-800/80">
+                                <img id="dropUserAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emerald-500">
+                                <div class="overflow-hidden">
+                                    <h4 id="dropUserName" class="text-sm font-bold text-white truncate">Faheem Khan</h4>
+                                    <p id="dropUserPhone" class="text-xs text-slate-400 font-mono truncate">+92 300 8899776</p>
+                                    <span id="dropUserBadge" class="inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-full mt-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">PASSENGER</span>
+                                </div>
+                            </div>
+
+                            <!-- Extra Captain Info (hidden for passenger) -->
+                            <div id="dropCaptainDetails" class="hidden space-y-1.5 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 text-[11px]">
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Vehicle:</span>
+                                    <span id="dropVehicleName" class="text-white font-semibold">Toyota Corolla</span>
+                                </div>
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Plate:</span>
+                                    <span id="dropPlateNumber" class="text-amber-400 font-mono font-semibold">LEA-2024</span>
+                                </div>
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Rating:</span>
+                                    <span id="dropCaptainRating" class="text-amber-400 font-semibold">★ 4.90</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-1">
+                                <button onclick="logoutUser()" class="w-full py-2 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-bold flex items-center justify-center space-x-2 transition active:scale-95">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Sign Out / Switch Account</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WS Signal Badge -->
+                    <div id="wsBadge" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+                        <span id="wsDot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                        <span id="wsText" class="text-slate-300 font-medium hidden sm:inline">Connecting</span>
+                    </div>
+
+                    <!-- Sound FX Toggle -->
+                    <button id="soundBtn" onclick="toggleSound()" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center justify-center text-emerald-400 text-sm transition active:scale-90" title="Toggle Audio Chimes">
+                        <i id="soundIcon" class="fas fa-volume-up"></i>
+                    </button>
+
+                    <!-- Dual Theme Toggle (Light / Dark) -->
+                    <button id="themeToggleBtn" onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center justify-center text-amber-500 text-sm transition active:scale-90" title="Toggle Light / Dark Mode">
+                        <i id="themeIcon" class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- FLOATING TOAST NOTIFICATION CONTAINER -->
+        <div id="toastContainer" class="fixed top-20 right-4 z-50 pointer-events-none max-w-sm w-full space-y-2"></div>
+
+        <!-- MAIN WEBSITE CONTENT AREA -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+            <!-- MOBILE SECONDARY SERVICE NAV (VISIBLE ON SMALL SCREENS) -->
+            <div class="md:hidden flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+                <button onclick="switchServiceModule('INTERCITY')" id="m-svc-INTERCITY" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-emerald-500 text-black">
+                    <i class="fas fa-route mr-1"></i> Intercity
+                </button>
+                <button onclick="switchServiceModule('INTRACITY')" id="m-svc-INTRACITY" class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300">
+                    <i class="fas fa-city mr-1"></i> City Rides
+                </button>
+                <button onclick="switchServiceModule('OFFICE')" id="m-svc-OFFICE" class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300">
+                    <i class="fas fa-building mr-1 text-amber-400"></i> Office Pick & Drop
+                </button>
+                <button onclick="switchServiceModule('COMMUNITY')" id="m-svc-COMMUNITY" class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300">
+                    <i class="fas fa-comments mr-1 text-purple-400"></i> Community
+                </button>
+            </div>
+
+            <!-- SERVICE MODULE 1: INTERCITY RIDE-SHARING & BIDDING (PRIMARY MARKETPLACE) -->
+            <div id="module-INTERCITY" class="space-y-6">
+                
+                <!-- SUB NAVIGATION TABS FOR ACTIVE ROLE -->
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+                    
+                    <!-- PASSENGER SPECIFIC SUB-NAV -->
+                    <div id="subnav-PASSENGER" class="flex items-center space-x-3">
+                        <button id="nav-PASSENGER-BOOK" onclick="switchAppTab('PASSENGER-BOOK')" class="nav-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Post Ride & Live Bids</span>
+                        </button>
+                        <button id="nav-PASSENGER-ROUTES" onclick="switchAppTab('PASSENGER-ROUTES')" class="nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-900 border border-transparent">
+                            <i class="fas fa-car-side"></i>
+                            <span>Captain Scheduled Routes</span>
+                        </button>
+                    </div>
+
+                    <!-- CAPTAIN SPECIFIC SUB-NAV -->
+                    <div id="subnav-CAPTAIN" class="flex items-center space-x-3 hidden">
+                        <button id="nav-CAPTAIN-POST" onclick="switchAppTab('CAPTAIN-POST')" class="nav-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Post Route & Scheduled Trips</span>
+                        </button>
+                        <button id="nav-CAPTAIN-FEED" onclick="switchAppTab('CAPTAIN-FEED')" class="nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-900 border border-transparent">
+                            <i class="fas fa-radar"></i>
+                            <span>Passenger Ride Requests</span>
+                        </button>
+                    </div>
+
+                    <div class="hidden lg:flex items-center space-x-3 text-xs text-slate-400">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-bolt text-emerald-400"></i> Instant Bidding</span>
+                        <span class="text-slate-700">•</span>
+                        <span class="flex items-center gap-1.5"><i class="fas fa-shield-halved text-cyan-400"></i> Verified Captains</span>
+                    </div>
+                </div>
+
+                <!-- TAB 1: PASSENGER BOOK FARE REQUEST (DESKTOP 2-COLUMN GRID) -->
+                <div id="tab-PASSENGER-BOOK" class="tab-page grid grid-cols-1 lg:grid-cols-12 gap-6 animate-slide-up">
+                    
+                    <!-- LEFT COLUMN: PASSENGER REQUEST FORM (7 COLS ON DESKTOP) -->
+                    <div class="lg:col-span-7 glass-card-glow p-5 sm:p-6 space-y-5">
+                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+                            <div>
+                                <h2 class="font-display font-black text-lg text-emerald-400 flex items-center gap-2">
+                                    <i class="fas fa-paper-plane"></i> Book Intercity Trip & Set Your Fare
+                                </h2>
+                                <p class="text-xs text-slate-400">Specify your route details and negotiate live counter-bids with captains across Pakistan</p>
+                            </div>
+                            <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full font-mono font-bold hidden sm:inline-block">PASSENGER</span>
+                        </div>
+
+                        <!-- POPULAR ROUTES QUICK CHIPS -->
+                        <div>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Popular Intercity Corridors</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="setQuickRoute('Lahore', 'Islamabad', 3200)" class="text-xs bg-slate-900 hover:bg-emerald-950 border border-slate-800 hover:border-emerald-500/50 text-slate-300 hover:text-emerald-400 px-3 py-1.5 rounded-xl transition active:scale-95 flex items-center space-x-1.5">
+                                    <span>Lahore ➔ Islamabad</span>
+                                    <span class="text-[10px] text-emerald-400 font-mono">PKR 3200</span>
+                                </button>
+                                <button onclick="setQuickRoute('Rawalpindi', 'Murree', 2500)" class="text-xs bg-slate-900 hover:bg-emerald-950 border border-slate-800 hover:border-emerald-500/50 text-slate-300 hover:text-emerald-400 px-3 py-1.5 rounded-xl transition active:scale-95 flex items-center space-x-1.5">
+                                    <span>Rawalpindi ➔ Murree</span>
+                                    <span class="text-[10px] text-emerald-400 font-mono">PKR 2500</span>
+                                </button>
+                                <button onclick="setQuickRoute('Karachi', 'Hyderabad', 4000)" class="text-xs bg-slate-900 hover:bg-emerald-950 border border-slate-800 hover:border-emerald-500/50 text-slate-300 hover:text-emerald-400 px-3 py-1.5 rounded-xl transition active:scale-95 flex items-center space-x-1.5">
+                                    <span>Karachi ➔ Hyderabad</span>
+                                    <span class="text-[10px] text-emerald-400 font-mono">PKR 4000</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- PICKUP & DESTINATION DROPDOWNS -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-slate-300 font-semibold block mb-1.5">
+                                    <i class="fas fa-circle text-emerald-400 text-[10px] mr-1.5"></i> Pickup City
+                                </label>
+                                <select id="pickupCity" onchange="calculateRecommendedFare()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl p-3 text-sm text-white focus:outline-none transition shadow-inner">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-300 font-semibold block mb-1.5">
+                                    <i class="fas fa-location-dot text-rose-500 text-[10px] mr-1.5"></i> Destination City
+                                </label>
+                                <select id="destCity" onchange="calculateRecommendedFare()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl p-3 text-sm text-white focus:outline-none transition shadow-inner">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- VEHICLE CATEGORY CARDS -->
+                        <div>
+                            <label class="text-xs text-slate-300 font-semibold block mb-2">Select Vehicle Category</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button id="cat-COMFORT" onclick="selectCategory('COMFORT')" class="cat-btn glass-card-glow p-3 rounded-2xl text-center cursor-pointer transition active:scale-95">
+                                    <i class="fas fa-car text-emerald-400 text-lg mb-1 block"></i>
+                                    <span class="text-xs font-bold text-white block">Comfort</span>
+                                    <span class="text-[10px] text-slate-400 block mt-0.5">Corolla / Civic</span>
+                                </button>
+                                <button id="cat-ECONOMY" onclick="selectCategory('ECONOMY')" class="cat-btn glass-card p-3 rounded-2xl text-center cursor-pointer hover:border-emerald-500/30 transition active:scale-95">
+                                    <i class="fas fa-car-side text-slate-400 text-lg mb-1 block"></i>
+                                    <span class="text-xs font-bold text-white block">Economy</span>
+                                    <span class="text-[10px] text-slate-400 block mt-0.5">Alto / Cultus</span>
+                                </button>
+                                <button id="cat-EXECUTIVE" onclick="selectCategory('EXECUTIVE')" class="cat-btn glass-card p-3 rounded-2xl text-center cursor-pointer hover:border-emerald-500/30 transition active:scale-95">
+                                    <i class="fas fa-shuttle-van text-cyan-400 text-lg mb-1 block"></i>
+                                    <span class="text-xs font-bold text-white block">Executive</span>
+                                    <span class="text-[10px] text-slate-400 block mt-0.5">Revo / SUV</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- OFFER FARE INPUT -->
+                        <div class="bg-slate-950 border border-emerald-900/40 p-4 rounded-2xl space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs text-slate-200 font-bold">Your Proposed Offer Fare (PKR)</label>
+                                <span id="recFareBadge" class="text-xs text-emerald-400 font-mono font-semibold">Rec: PKR 3200</span>
+                            </div>
+                            <div class="relative flex items-center">
+                                <span class="absolute left-4 text-emerald-400 font-extrabold text-base">PKR</span>
+                                <input id="offerAmount" type="number" value="3200" step="50" class="w-full bg-black border border-emerald-500/40 focus:border-emerald-400 rounded-xl py-3 pl-16 pr-4 text-xl font-black text-emerald-400 focus:outline-none transition shadow-inner">
+                            </div>
+                        </div>
+
+                        <!-- BROADCAST ACTION BUTTON -->
+                        <button onclick="broadcastRide()" class="w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 hover:from-emerald-400 hover:to-cyan-300 text-black font-black py-4 rounded-2xl shadow-xl shadow-emerald-500/20 text-center transition active:scale-95 flex items-center justify-center space-x-2 text-base">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Broadcast Fare Request</span>
+                        </button>
+                    </div>
+
+                    <!-- RIGHT COLUMN: LIVE COUNTER-BIDS RECEIVED (5 COLS ON DESKTOP) -->
+                    <div class="lg:col-span-5 glass-card p-5 sm:p-6 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <div>
+                                    <h3 class="font-display font-bold text-sm text-slate-100 flex items-center gap-2">
+                                        <i class="fas fa-hand-holding-usd text-amber-400"></i> Live Captain Counter-Bids
+                                    </h3>
+                                    <p class="text-[11px] text-slate-400">Real-time bids submitted by active captains nearby</p>
+                                </div>
+                                <span id="bidsCountBadge" class="text-xs bg-slate-900 text-emerald-400 border border-slate-800 px-3 py-1 rounded-full font-mono font-bold">0 Bids</span>
+                            </div>
+
+                            <div id="passengerBidsList" class="space-y-3 mt-4 min-h-[250px] max-h-[480px] overflow-y-auto pr-1">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- MARKETPLACE HINT FOOTER CARD -->
+                        <div class="p-3.5 bg-slate-950 border border-slate-800/80 rounded-xl flex items-center space-x-3 text-xs text-slate-400">
+                            <i class="fas fa-shield-check text-emerald-400 text-lg"></i>
+                            <div>
+                                <span class="font-semibold text-slate-200 block">Negotiate Safely</span>
+                                <span>Captains place real-time bids. Accept any offer to lock in your ride instantly.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TAB 2: PASSENGER BROWSE CAPTAIN SCHEDULED ROUTES -->
+                <div id="tab-PASSENGER-ROUTES" class="tab-page space-y-4 hidden animate-slide-up">
+                    <div class="glass-card p-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div>
+                                <h2 class="font-display font-black text-lg text-teal-400 flex items-center gap-2">
+                                    <i class="fas fa-calendar-check"></i> Captain Scheduled Intercity Routes
+                                </h2>
+                                <p class="text-xs text-slate-400">Browse captains driving scheduled intercity routes & reserve seats in advance</p>
+                            </div>
+                            <span id="captainTripsCount" class="text-xs bg-teal-950 text-teal-300 border border-teal-800 px-3 py-1 rounded-full font-mono font-bold">0 Routes</span>
+                        </div>
+
+                        <div id="captainTripsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[200px]">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: CAPTAIN LIVE PASSENGER RADAR FEED -->
+                <div id="tab-CAPTAIN-FEED" class="tab-page space-y-4 hidden animate-slide-up">
+                    <div class="glass-card-amber p-6 space-y-5">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-3 gap-2">
+                            <div>
+                                <h2 class="font-display font-black text-lg text-amber-400 flex items-center gap-2">
+                                    <i class="fas fa-radar"></i> Live Passenger Trip Requests Radar
+                                </h2>
+                                <p class="text-xs text-slate-400">Intercity passenger fare requests looking for captains right now</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="shareCaptainGPS()" class="text-xs bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl font-mono font-bold transition active:scale-95 flex items-center space-x-1.5">
+                                    <i class="fas fa-location-arrow"></i>
+                                    <span>Transmit Live GPS Location</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="captainFeedList" class="grid grid-cols-1 md:grid-cols-2 gap-4 min-h-[200px]">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: CAPTAIN POST SCHEDULED ROUTE (DESKTOP 2-COLUMN GRID) -->
+                <div id="tab-CAPTAIN-POST" class="tab-page grid grid-cols-1 lg:grid-cols-12 gap-6 hidden animate-slide-up">
+                    
+                    <!-- LEFT COLUMN: CAPTAIN POST ROUTE FORM (7 COLS ON DESKTOP) -->
+                    <div class="lg:col-span-7 glass-card-amber p-5 sm:p-6 space-y-5">
+                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+                            <div>
+                                <h2 class="font-display font-black text-lg text-amber-400 flex items-center gap-2">
+                                    <i class="fas fa-circle-plus"></i> Post Your Driving Route
+                                </h2>
+                                <p class="text-xs text-slate-400">Publish your intercity route and let passengers book seats in your vehicle</p>
+                            </div>
+                            <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full font-mono font-bold hidden sm:inline-block">CAPTAIN</span>
+                        </div>
+
+                        <!-- CAPTAIN PROFILE BANNER -->
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" class="w-12 h-12 rounded-2xl border-2 border-amber-400 object-cover shadow-md">
+                                <div>
+                                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                        Captain Tariq Khan
+                                        <span class="text-amber-400 text-xs font-semibold">★ 4.9</span>
+                                    </h4>
+                                    <p class="text-xs text-slate-400">Toyota Corolla • SE-412 • Executive AC Comfort</p>
+                                </div>
+                            </div>
+                            <span class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-mono font-bold">ONLINE</span>
+                        </div>
+
+                        <!-- ROUTE FORM -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-slate-300 font-semibold block mb-1.5">
+                                    <i class="fas fa-circle text-amber-400 text-[10px] mr-1.5"></i> Departure City
+                                </label>
+                                <select id="tripOriginCity" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl p-3 text-sm text-white focus:outline-none transition shadow-inner">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-300 font-semibold block mb-1.5">
+                                    <i class="fas fa-location-dot text-rose-500 text-[10px] mr-1.5"></i> Destination City
+                                </label>
+                                <select id="tripDestCity" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl p-3 text-sm text-white focus:outline-none transition shadow-inner">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-slate-300 font-semibold block mb-1.5">Price per Seat (PKR)</label>
+                                <div class="relative flex items-center">
+                                    <span class="absolute left-4 text-amber-400 font-extrabold text-base">PKR</span>
+                                    <input id="tripSeatPrice" type="number" value="1100" step="50" class="w-full bg-black border border-amber-500/40 focus:border-amber-400 rounded-xl py-3 pl-16 pr-4 text-xl font-black text-amber-400 focus:outline-none transition shadow-inner">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-300 font-semibold block mb-1.5">Departure Schedule</label>
+                                <input id="tripDepTime" type="text" value="Today @ 5:00 PM" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl p-3 text-sm text-white focus:outline-none transition shadow-inner">
+                            </div>
+                        </div>
+
+                        <!-- PUBLISH ACTION BUTTON -->
+                        <button onclick="postCaptainTrip()" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-orange-400 hover:from-amber-400 hover:to-orange-300 text-black font-black py-4 rounded-2xl shadow-xl shadow-amber-500/20 text-center transition active:scale-95 flex items-center justify-center space-x-2 text-base">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Publish Scheduled Route</span>
+                        </button>
+                    </div>
+
+                    <!-- RIGHT COLUMN: CAPTAIN'S OWN PUBLISHED ROUTES (5 COLS ON DESKTOP) -->
+                    <div class="lg:col-span-5 glass-card p-5 sm:p-6 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <div>
+                                    <h3 class="font-display font-bold text-sm text-slate-100 flex items-center gap-2">
+                                        <i class="fas fa-calendar-check text-teal-400"></i> Your Published Routes
+                                    </h3>
+                                    <p class="text-[11px] text-slate-400">Routes you have published for passengers to book</p>
+                                </div>
+                                <span id="captainOwnRoutesCount" class="text-xs bg-slate-900 text-amber-400 border border-slate-800 px-3 py-1 rounded-full font-mono font-bold">0 Routes</span>
+                            </div>
+
+                            <div id="captainOwnRoutesList" class="space-y-3 mt-4 min-h-[250px] max-h-[480px] overflow-y-auto pr-1">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- HINT FOOTER -->
+                        <div class="p-3.5 bg-slate-950 border border-slate-800/80 rounded-xl flex items-center space-x-3 text-xs text-slate-400">
+                            <i class="fas fa-bolt text-amber-400 text-lg"></i>
+                            <div>
+                                <span class="font-semibold text-slate-200 block">Earn More</span>
+                                <span>Post routes frequently to attract more passengers and fill empty seats.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                </div>
+
+            </div>
+
+            <!-- SERVICE MODULE 2: INTRACITY (WITHIN CITY RIDES) - FUTURE EXTENSIBLE preview -->
+            <div id="module-INTRACITY" class="space-y-6 hidden animate-fade-in">
+                <div class="glass-card p-8 text-center space-y-4 max-w-3xl mx-auto">
+                    <div class="w-16 h-16 rounded-3xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-3xl mx-auto shadow-xl">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h2 class="font-display font-black text-2xl text-white">Intra-City Rides (Within City Bidding)</h2>
+                        <p class="text-sm text-slate-400 max-w-md mx-auto">Quick daily rides within Lahore, Islamabad, Karachi, Rawalpindi, and major cities with instant auto-rickshaw, bike, and mini car options.</p>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
+                        <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center">
+                            <i class="fas fa-motorcycle text-cyan-400 text-xl mb-1"></i>
+                            <span class="text-xs font-bold text-white block">Moto Bike</span>
+                            <span class="text-[10px] text-slate-400">Ultra Low Fare</span>
+                        </div>
+                        <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center">
+                            <i class="fas fa-car-side text-emerald-400 text-xl mb-1"></i>
+                            <span class="text-xs font-bold text-white block">Mini Car</span>
+                            <span class="text-[10px] text-slate-400">AC Comfort</span>
+                        </div>
+                        <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center">
+                            <i class="fas fa-taxi text-amber-400 text-xl mb-1"></i>
+                            <span class="text-xs font-bold text-white block">City Auto</span>
+                            <span class="text-[10px] text-slate-400">Local Commute</span>
+                        </div>
+                        <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center">
+                            <i class="fas fa-car-large text-purple-400 text-xl mb-1"></i>
+                            <span class="text-xs font-bold text-white block">Sedan Plus</span>
+                            <span class="text-[10px] text-slate-400">Business Travel</span>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <span class="text-xs bg-cyan-950 text-cyan-300 border border-cyan-800 px-4 py-2 rounded-full font-mono font-semibold">
+                            🚀 Integration Ready • Module Launching Next Release
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICE MODULE 3: OFFICE & FIXED PICK & DROP - FUTURE EXTENSIBLE PREVIEW -->
+            <div id="module-OFFICE" class="space-y-6 hidden animate-fade-in">
+                <div class="glass-card p-8 text-center space-y-4 max-w-3xl mx-auto">
+                    <div class="w-16 h-16 rounded-3xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-3xl mx-auto shadow-xl">
+                        <i class="fas fa-building-user"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h2 class="font-display font-black text-2xl text-white">Office & Corporate Fixed Pick & Drop</h2>
+                        <p class="text-sm text-slate-400 max-w-md mx-auto">Subscribe to monthly fixed daily office commute routes with guaranteed seats, fixed timings, and dedicated executive captains.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left pt-4">
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-1">
+                            <i class="fas fa-clock text-amber-400 text-lg"></i>
+                            <h4 class="text-xs font-bold text-white">Fixed Departure Timings</h4>
+                            <p class="text-[11px] text-slate-400">Daily morning pickup from home & evening drop from office.</p>
+                        </div>
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-1">
+                            <i class="fas fa-wallet text-emerald-400 text-lg"></i>
+                            <h4 class="text-xs font-bold text-white">Monthly Subscription</h4>
+                            <p class="text-[11px] text-slate-400">Save up to 40% compared to daily individual ride bookings.</p>
+                        </div>
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-1">
+                            <i class="fas fa-shield-check text-cyan-400 text-lg"></i>
+                            <h4 class="text-xs font-bold text-white">Reserved Van / Coaster</h4>
+                            <p class="text-[11px] text-slate-400">Clean, AC-equipped shared executive rides with verified peers.</p>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <span class="text-xs bg-amber-950 text-amber-300 border border-amber-800 px-4 py-2 rounded-full font-mono font-semibold">
+                            💼 Fixed Commute Service Engine
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICE MODULE 4: COMMUNITY CHAT & FORUM - FUTURE EXTENSIBLE PREVIEW -->
+            <div id="module-COMMUNITY" class="space-y-6 hidden animate-fade-in">
+                <div class="glass-card p-8 space-y-6 max-w-4xl mx-auto">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                        <div>
+                            <h2 class="font-display font-black text-xl text-purple-400 flex items-center gap-2">
+                                <i class="fas fa-comments"></i> Safar Traveler & Captain Community Chat
+                            </h2>
+                            <p class="text-xs text-slate-400">Connect with travelers, discuss motorway conditions, weather updates & carpooling tips</p>
+                        </div>
+                        <span class="text-xs bg-purple-950 text-purple-300 border border-purple-800 px-3 py-1 rounded-full font-mono font-bold">LIVE FORUM</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs font-bold text-white">M-2 Motorway Fog Advisory <span class="text-[10px] text-slate-500 ml-2">10 mins ago</span></h4>
+                                    <span class="text-[10px] bg-slate-900 text-slate-400 px-2 py-0.5 rounded">Highway Patrol</span>
+                                </div>
+                                <p class="text-xs text-slate-300 mt-1">Dense fog reported near Bhera interchanges between 4 AM to 8 AM. Travel safely!</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                                <i class="fas fa-car-side"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs font-bold text-white">Captain Kamran (Rawalpindi ➔ Murree) <span class="text-[10px] text-slate-500 ml-2">25 mins ago</span></h4>
+                                    <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded">Captain</span>
+                                </div>
+                                <p class="text-xs text-slate-300 mt-1">Leaving for Murree at 4:30 PM today in Honda Civic. 2 seats available for families!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- WEBSITE FOOTER -->
+        <footer class="bg-slate-950 border-t border-slate-800/80 px-4 sm:px-8 py-6 mt-12">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+                <div class="flex items-center space-x-3">
+                    <span class="font-display font-bold text-white">سفر Safar Platform</span>
+                    <span>•</span>
+                    <span>Intercity & Urban Mobility Bidding Engine</span>
+                </div>
+                <div>
+                    <span>© 2026 Safar Technologies Pakistan. All rights reserved.</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- AUTH MODAL: SIGN IN & CREATE ACCOUNT (ROLE LOCKED) -->
+    <div id="authModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card-glow w-full max-w-md p-6 space-y-5 relative animate-slide-up shadow-2xl max-h-[92vh] overflow-y-auto">
+            <button id="authModalCloseBtn" onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg transition">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Modal Brand Header -->
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 flex items-center justify-center font-display font-black text-black text-2xl mx-auto shadow-lg shadow-emerald-500/25">
+                    س
+                </div>
+                <h3 class="font-display font-black text-lg text-white pt-2">Welcome to Safar Mobility</h3>
+                <p class="text-xs text-slate-400">Select your account type to access your dedicated portal</p>
+            </div>
+
+            <!-- Auth Mode Switcher -->
+            <div class="grid grid-cols-2 p-1 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold text-center">
+                <button id="authTabLogin" onclick="switchAuthMode('LOGIN')" class="py-2 rounded-lg transition bg-emerald-500 text-black shadow">
+                    Sign In
+                </button>
+                <button id="authTabSignup" onclick="switchAuthMode('SIGNUP')" class="py-2 rounded-lg transition text-slate-400 hover:text-white">
+                    Create Account
+                </button>
+            </div>
+
+            <!-- Quick Demo Login Helpers -->
+            <div id="quickDemoSection" class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-2">
+                <div class="text-[10px] text-slate-400 uppercase font-mono tracking-wider text-center">Fast Demo Access</div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" onclick="demoLogin('PASSENGER')" class="py-2 px-3 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center space-x-1.5 active:scale-95">
+                        <i class="fas fa-user"></i>
+                        <span>Passenger Demo</span>
+                    </button>
+                    <button type="button" onclick="demoLogin('CAPTAIN')" class="py-2 px-3 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center justify-center space-x-1.5 active:scale-95">
+                        <i class="fas fa-taxi"></i>
+                        <span>Captain Demo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-3.5">
+                <div>
+                    <label class="text-[11px] font-medium text-slate-300 block mb-1">Email or Phone Number</label>
+                    <input id="loginIdentifier" type="text" required placeholder="e.g. passenger@safar.pk or +92 300 8899776" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
+                </div>
+                <div>
+                    <label class="text-[11px] font-medium text-slate-300 block mb-1">Password</label>
+                    <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
+                </div>
+                <div id="loginError" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-xl"></div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Sign In to Portal</span>
+                </button>
+            </form>
+
+            <!-- SIGNUP FORM (ROLE SELECTED HERE) -->
+            <form id="signupForm" onsubmit="handleSignupSubmit(event)" class="space-y-3.5 hidden">
+                <!-- Choose Role (Radio Cards) -->
+                <div>
+                    <label class="text-[11px] font-medium text-slate-300 block mb-1.5">Select Account Type:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="signupRole" value="PASSENGER" checked onchange="toggleSignupFields('PASSENGER')" class="peer sr-only">
+                            <div class="p-3 rounded-xl border border-slate-700 bg-slate-900/80 peer-checked:border-emerald-500 peer-checked:bg-emerald-500/10 text-center transition">
+                                <i class="fas fa-user text-emerald-400 text-base mb-1 block"></i>
+                                <span class="text-xs font-bold text-white block">Passenger</span>
+                                <span class="text-[9px] text-slate-400 block">Post rides & book trips</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="signupRole" value="CAPTAIN" onchange="toggleSignupFields('CAPTAIN')" class="peer sr-only">
+                            <div class="p-3 rounded-xl border border-slate-700 bg-slate-900/80 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 text-center transition">
+                                <i class="fas fa-taxi text-amber-400 text-base mb-1 block"></i>
+                                <span class="text-xs font-bold text-white block">Captain</span>
+                                <span class="text-[9px] text-slate-400 block">Post routes & bid fares</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[11px] font-medium text-slate-300 block mb-1">Full Name</label>
+                        <input id="signupName" type="text" required placeholder="e.g. Ali Ahmed" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-medium text-slate-300 block mb-1">City</label>
+                        <select id="signupCity" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <option value="Lahore">Lahore</option>
+                            <option value="Islamabad">Islamabad</option>
+                            <option value="Karachi">Karachi</option>
+                            <option value="Rawalpindi">Rawalpindi</option>
+                            <option value="Faisalabad">Faisalabad</option>
+                            <option value="Multan">Multan</option>
+                            <option value="Peshawar">Peshawar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[11px] font-medium text-slate-300 block mb-1">Phone Number</label>
+                        <input id="signupPhone" type="tel" required placeholder="0300 1234567" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-medium text-slate-300 block mb-1">Email</label>
+                        <input id="signupEmail" type="email" required placeholder="ali@example.com" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[11px] font-medium text-slate-300 block mb-1">Password</label>
+                    <input id="signupPassword" type="password" required placeholder="Choose a password" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <!-- CAPTAIN SPECIFIC EXTRA FIELDS -->
+                <div id="signupCaptainFields" class="hidden space-y-3 pt-2 border-t border-slate-800/80">
+                    <div class="text-[11px] font-bold text-amber-400 flex items-center gap-1.5">
+                        <i class="fas fa-id-card"></i>
+                        <span>Captain & Vehicle Details</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[11px] font-medium text-slate-300 block mb-1">Vehicle Model</label>
+                            <input id="signupVehicle" type="text" placeholder="e.g. Honda Civic" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-medium text-slate-300 block mb-1">Plate Number</label>
+                            <input id="signupPlate" type="text" placeholder="e.g. LEA-2024" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-medium text-slate-300 block mb-1">CNIC Number</label>
+                        <input id="signupCnic" type="text" placeholder="e.g. 35201-1234567-1" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
+                    </div>
+                </div>
+
+                <div id="signupError" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-xl"></div>
+                <button type="submit" id="signupSubmitBtn" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Register Account</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TRACKING MODAL FOR ACCEPTED RIDES -->
+    <div id="trackingModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card-glow w-full max-w-md p-6 space-y-5 relative animate-slide-up shadow-2xl">
+            <button onclick="closeTrackingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg transition">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="flex items-center space-x-4 border-b border-slate-800 pb-4">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-black flex items-center justify-center text-xl font-bold shadow-lg shadow-emerald-500/20">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <div>
+                    <span id="modalRideId" class="text-xs text-emerald-400 font-mono font-bold block">RIDE-1001</span>
+                    <h3 id="modalStatusTitle" class="font-display font-black text-base text-white">Captain En Route to Pickup</h3>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2 text-center font-mono text-[10px]">
+                <div id="step-ACCEPTED" class="p-2 rounded-xl bg-emerald-500 text-black font-bold">ACCEPTED</div>
+                <div id="step-EN_ROUTE" class="p-2 rounded-xl bg-slate-900 text-slate-400 border border-slate-800">EN ROUTE</div>
+                <div id="step-TRIP_STARTED" class="p-2 rounded-xl bg-slate-900 text-slate-400 border border-slate-800">ON TRIP</div>
+                <div id="step-COMPLETED" class="p-2 rounded-xl bg-slate-900 text-slate-400 border border-slate-800">ARRIVED</div>
+            </div>
+
+            <div id="modalCaptainInfo" class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+                <!-- Populated dynamically -->
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <a id="modalCallBtn" href="tel:+923001234567" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl text-center text-xs transition flex items-center justify-center space-x-2 active:scale-95 shadow-md">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>Call Captain</span>
+                </a>
+                <button onclick="alert('SOS Alert sent to Safar Emergency Team!')" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/40 font-bold py-3 rounded-xl text-center text-xs transition flex items-center justify-center space-x-2 active:scale-95">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SOS Emergency</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        let currentRole = 'PASSENGER'; 
+        let activeTab = 'PASSENGER-BOOK';
+        let activeModule = 'INTERCITY';
+        let soundEnabled = true;
+        let activeRideId = null;
+        let citiesData = {};
+        let ridesState = {};
+        let captainTripsState = {};
+        let selectedCategory = 'COMFORT';
+
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/ws`;
+        let ws = null;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTone(freq, type, duration, delay = 0) {
+            if (!soundEnabled) return;
+            setTimeout(() => {
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + duration);
+                } catch(e){}
+            }, delay);
+        }
+
+        function playChimeNewRide() {
+            playTone(523.25, 'sine', 0.2, 0);
+            playTone(659.25, 'sine', 0.2, 100);
+            playTone(783.99, 'sine', 0.3, 200);
+        }
+
+        function playChimeNewBid() {
+            playTone(880, 'triangle', 0.15, 0);
+            playTone(1046.50, 'triangle', 0.2, 100);
+        }
+
+        function playChimeAccepted() {
+            playTone(523.25, 'sine', 0.2, 0);
+            playTone(659.25, 'sine', 0.2, 100);
+            playTone(783.99, 'sine', 0.4, 200);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundBtn');
+            const icon = document.getElementById('soundIcon');
+            if (soundEnabled) {
+                btn.className = 'w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center justify-center text-emerald-400 text-sm transition active:scale-90';
+                icon.className = 'fas fa-volume-up';
+            } else {
+                btn.className = 'w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center justify-center text-slate-500 text-sm transition active:scale-90';
+                icon.className = 'fas fa-volume-mute';
+            }
+        }
+
+        function showToast(msg, icon = 'fa-info-circle') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'glass-card p-4 text-xs flex items-center space-x-3 text-white border-l-4 border-emerald-400 shadow-2xl animate-toast pointer-events-auto';
+            toast.innerHTML = `<i class="fas ${icon} text-emerald-400 text-base"></i><span class="font-semibold">${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        function connectWebSocket() {
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                document.getElementById('wsDot').className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 pulse-dot';
+                document.getElementById('wsText').innerText = 'Live WS';
+                document.getElementById('wsBadge').className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-xs';
+                loadInitialData();
+            };
+
+            ws.onclose = () => {
+                document.getElementById('wsDot').className = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+                document.getElementById('wsText').innerText = 'Offline';
+                document.getElementById('wsBadge').className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-rose-950/60 border border-rose-500/30 text-xs';
+                setTimeout(connectWebSocket, 3000);
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleWSMessage(data);
+            };
+        }
+
+        function handleWSMessage(data) {
+            if (data.type === 'INITIAL_STATE') {
+                ridesState = {};
+                (data.rides || []).forEach(r => ridesState[r.id] = r);
+                captainTripsState = {};
+                (data.captain_trips || []).forEach(t => captainTripsState[t.id] = t);
+                renderAll();
+            } 
+            else if (data.type === 'NEW_RIDE_REQUEST') {
+                ridesState[data.ride.id] = data.ride;
+                playChimeNewRide();
+                showToast(`New Ride Request! ${data.ride.origin.name} ➔ ${data.ride.destination.name}`, 'fa-paper-plane');
+                renderAll();
+            }
+            else if (data.type === 'NEW_BID') {
+                if (ridesState[data.ride_id]) {
+                    ridesState[data.ride_id].bids.push(data.bid);
+                }
+                playChimeNewBid();
+                showToast(`Counter-Bid Received from ${data.bid.captain_name}: PKR ${data.bid.amount}`, 'fa-hand-holding-usd');
+                renderAll();
+            }
+            else if (data.type === 'BID_ACCEPTED') {
+                ridesState[data.ride_id] = data.ride;
+                playChimeAccepted();
+                showToast(`Bid Accepted! Ride ID: ${data.ride_id}`, 'fa-check-circle');
+                renderAll();
+                showTrackingModal(data.ride);
+            }
+            else if (data.type === 'RIDE_STATUS_UPDATED') {
+                ridesState[data.ride_id] = data.ride;
+                renderAll();
+                if (activeRideId === data.ride_id) {
+                    updateTrackingModalStatus(data.ride);
+                }
+            }
+            else if (data.type === 'NEW_CAPTAIN_TRIP') {
+                captainTripsState[data.trip.id] = data.trip;
+                showToast(`New Captain Route: ${data.trip.origin.name} ➔ ${data.trip.destination.name}`, 'fa-car-side');
+                renderAll();
+            }
+        }
+
+        async function loadInitialData() {
+            try {
+                const citiesRes = await fetch('/api/cities');
+                citiesData = await citiesRes.json();
+                populateCityDropdowns();
+
+                const ridesRes = await fetch('/api/rides');
+                const rides = await ridesRes.json();
+                rides.forEach(r => ridesState[r.id] = r);
+
+                const tripsRes = await fetch('/api/captain-trips');
+                const trips = await tripsRes.json();
+                trips.forEach(t => captainTripsState[t.id] = t);
+
+                renderAll();
+            } catch(err) {
+                console.error("Failed to load initial data", err);
+            }
+        }
+
+        function populateCityDropdowns() {
+            const p = document.getElementById('pickupCity');
+            const d = document.getElementById('destCity');
+            const o = document.getElementById('tripOriginCity');
+            const dt = document.getElementById('tripDestCity');
+            
+            p.innerHTML = ''; d.innerHTML = ''; o.innerHTML = ''; dt.innerHTML = '';
+
+            Object.keys(citiesData).forEach((city) => {
+                p.innerHTML += `<option value="${city}">${city}</option>`;
+                d.innerHTML += `<option value="${city}">${city}</option>`;
+                o.innerHTML += `<option value="${city}">${city}</option>`;
+                dt.innerHTML += `<option value="${city}">${city}</option>`;
+            });
+
+            p.value = "Lahore"; d.value = "Islamabad";
+            o.value = "Lahore"; dt.value = "Islamabad";
+            calculateRecommendedFare();
+        }
+
+        function setQuickRoute(pickup, dest, offer) {
+            document.getElementById('pickupCity').value = pickup;
+            document.getElementById('destCity').value = dest;
+            document.getElementById('offerAmount').value = offer;
+            calculateRecommendedFare();
+        }
+
+        function calculateRecommendedFare() {
+            const p = document.getElementById('pickupCity').value;
+            const d = document.getElementById('destCity').value;
+
+            if (p && d && citiesData[p] && citiesData[d]) {
+                const lat1 = citiesData[p].lat, lon1 = citiesData[p].lng;
+                const lat2 = citiesData[d].lat, lon2 = citiesData[d].lng;
+                
+                const R = 6371; 
+                const dLat = (lat2-lat1) * Math.PI / 180;
+                const dLon = (lon2-lon1) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                          Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                const distKm = Math.round(R * c);
+
+                let baseMultiplier = 12;
+                if (selectedCategory === 'ECONOMY') baseMultiplier = 9;
+                if (selectedCategory === 'EXECUTIVE') baseMultiplier = 18;
+
+                const estFare = Math.max(800, Math.round((distKm * baseMultiplier) / 50) * 50);
+                document.getElementById('recFareBadge').innerText = `Rec (${distKm} km): PKR ${estFare}`;
+            }
+        }
+
+        function selectCategory(cat) {
+            selectedCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.className = 'cat-btn glass-card p-3 rounded-2xl text-center cursor-pointer hover:border-emerald-500/30 transition active:scale-95');
+            
+            const activeBtn = document.getElementById(`cat-${cat}`);
+            if (activeBtn) activeBtn.className = 'cat-btn glass-card-glow p-3 rounded-2xl text-center cursor-pointer transition active:scale-95';
+            
+            calculateRecommendedFare();
+        }
+
+        async function broadcastRide() {
+            if (!currentUser) {
+                openAuthModal('LOGIN');
+                return;
+            }
+            const pickup = document.getElementById('pickupCity').value;
+            const dest = document.getElementById('destCity').value;
+            const offer = parseFloat(document.getElementById('offerAmount').value);
+
+            if (pickup === dest) {
+                alert("Pickup and Destination cities must be different!");
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/rides', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        passenger_name: currentUser.name || "Passenger",
+                        passenger_phone: currentUser.phone || "+92 300 8899776",
+                        origin_city: pickup,
+                        dest_city: dest,
+                        vehicle_category: selectedCategory,
+                        proposed_fare: offer
+                    })
+                });
+                const data = await res.json();
+                activeRideId = data.id;
+                showToast(`Ride Broadcasted! ID: ${data.id}`, 'fa-paper-plane');
+            } catch(e) {
+                alert("Error broadcasting ride: " + e);
+            }
+        }
+
+        async function submitCaptainBid(rideId) {
+            if (!currentUser) {
+                openAuthModal('LOGIN');
+                return;
+            }
+            const input = document.getElementById(`bidInput-${rideId}`);
+            if (!input) return;
+            const amount = parseFloat(input.value);
+            if (!amount || amount <= 0) return;
+
+            try {
+                await fetch(`/api/rides/${rideId}/bid`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        captain_id: currentUser.id || "CAP-101",
+                        captain_name: currentUser.name || "Captain",
+                        captain_phone: currentUser.phone || "+92 301 5544332",
+                        vehicle: currentUser.vehicle || "Toyota Corolla (SE-412)",
+                        rating: currentUser.rating || 4.9,
+                        amount: amount
+                    })
+                });
+                showToast(`Counter-Bid Sent: PKR ${amount}`, 'fa-check');
+            } catch(e) {
+                alert("Failed to submit bid: " + e);
+            }
+        }
+
+        async function acceptBid(rideId, bidId) {
+            try {
+                await fetch(`/api/rides/${rideId}/accept-bid`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bid_id: bidId })
+                });
+            } catch(e) {
+                alert("Failed to accept bid: " + e);
+            }
+        }
+
+        async function postCaptainTrip() {
+            if (!currentUser) {
+                openAuthModal('LOGIN');
+                return;
+            }
+            const o = document.getElementById('tripOriginCity').value;
+            const d = document.getElementById('tripDestCity').value;
+            const p = parseFloat(document.getElementById('tripSeatPrice').value);
+            const t = document.getElementById('tripDepTime').value;
+
+            if (o === d) {
+                alert("Departure and Destination cities must be different!");
+                return;
+            }
+
+            try {
+                await fetch('/api/captain-trips', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        captain_name: currentUser.name || "Captain",
+                        origin_city: o,
+                        dest_city: d,
+                        seat_price: p,
+                        departure_time: t,
+                        vehicle: currentUser.vehicle || "Toyota Corolla (AC)",
+                        rating: currentUser.rating || 4.9,
+                        available_seats: 3
+                    })
+                });
+                showToast("Scheduled Driving Route Published!", 'fa-check-circle');
+                renderCaptainOwnRoutes();
+            } catch(e) {
+                alert("Error posting route: " + e);
+            }
+        }
+
+        function shareCaptainGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    ws.send(JSON.stringify({
+                        type: 'UPDATE_CAPTAIN_LOCATION',
+                        captain_id: 'CAP-101',
+                        captain_name: 'Captain Tariq Khan',
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude,
+                        vehicle: 'Toyota Corolla'
+                    }));
+                    showToast("Live Captain GPS Transmitted!", 'fa-location-arrow');
+                }, () => {
+                    ws.send(JSON.stringify({
+                        type: 'UPDATE_CAPTAIN_LOCATION',
+                        captain_id: 'CAP-101',
+                        captain_name: 'Captain Tariq Khan',
+                        lat: 31.5204,
+                        lng: 74.3587,
+                        vehicle: 'Toyota Corolla'
+                    }));
+                    showToast("Simulated GPS Location Transmitted!", 'fa-location-arrow');
+                });
+            }
+        }
+
+        function renderAll() {
+            renderPassengerBids();
+            renderCaptainFeed();
+            renderCaptainTrips();
+            renderCaptainOwnRoutes();
+        }
+
+        function renderCaptainTrips() {
+            const container = document.getElementById('captainTripsList');
+            const trips = Object.values(captainTripsState);
+            document.getElementById('captainTripsCount').innerText = `${trips.length} Routes`;
+
+            if (!trips || trips.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6 col-span-full">No scheduled Captain routes posted yet.</p>`;
+                return;
+            }
+
+            container.innerHTML = trips.map(t => `
+                <div class="p-4 bg-slate-950 border border-teal-900/50 rounded-2xl flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <img src="${t.captain_avatar}" class="w-10 h-10 rounded-full border-2 border-teal-400 object-cover shadow">
+                        <div>
+                            <h4 class="text-xs font-bold text-white">${t.captain_name} <span class="text-teal-400 text-[10px]">★ ${t.rating}</span></h4>
+                            <p class="text-xs font-bold text-slate-200">${t.origin.name} ➔ ${t.destination.name}</p>
+                            <p class="text-[10px] text-slate-400">${t.vehicle} • ${t.departure_time}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-900 pt-2">
+                        <div>
+                            <div class="text-sm font-black text-emerald-400">PKR ${t.seat_price}</div>
+                            <span class="text-[9px] text-teal-300 bg-teal-950 px-2 py-0.5 rounded border border-teal-800 font-mono">${t.available_seats} seats left</span>
+                        </div>
+                        <button onclick="alert('Seat booking request sent to ${t.captain_name}!')" class="bg-teal-500 hover:bg-teal-400 text-black font-extrabold px-3 py-1.5 rounded-xl text-xs transition active:scale-95 shadow">
+                            Book Seat
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCaptainOwnRoutes() {
+            const container = document.getElementById('captainOwnRoutesList');
+            const countBadge = document.getElementById('captainOwnRoutesCount');
+            const trips = Object.values(captainTripsState);
+            
+            countBadge.innerText = `${trips.length} Routes`;
+
+            if (!trips || trips.length === 0) {
+                container.innerHTML = `
+                    <div class="p-4 bg-amber-950/30 border border-amber-500/30 rounded-2xl text-center space-y-1.5">
+                        <i class="fas fa-route text-amber-400 text-2xl"></i>
+                        <p class="text-xs text-slate-300 font-semibold">No routes published yet</p>
+                        <p class="text-[11px] text-slate-400">Use the form to publish your first driving route. Passengers will see it and can book seats.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = trips.map(t => `
+                <div class="p-3.5 bg-slate-950 border border-amber-900/50 rounded-2xl space-y-2 shadow-md">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] text-amber-400 font-mono font-bold">${t.id}</span>
+                        <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800/50 font-semibold">ACTIVE</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <img src="${t.captain_avatar}" class="w-9 h-9 rounded-full border-2 border-amber-400 object-cover">
+                        <div>
+                            <p class="text-xs font-bold text-white">${t.origin.name} ➔ ${t.destination.name}</p>
+                            <p class="text-[10px] text-slate-400">${t.vehicle} • ${t.departure_time}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-900 pt-2">
+                        <div class="text-sm font-black text-emerald-400">PKR ${t.seat_price} <span class="text-[10px] text-slate-400 font-normal">/ seat</span></div>
+                        <span class="text-[10px] text-teal-300 bg-teal-950 px-2 py-0.5 rounded border border-teal-800 font-mono">${t.available_seats} seats left</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPassengerBids() {
+            const container = document.getElementById('passengerBidsList');
+            const badge = document.getElementById('bidsCountBadge');
+
+            let activeRide = null;
+            if (activeRideId && ridesState[activeRideId]) {
+                activeRide = ridesState[activeRideId];
+            } else {
+                const keys = Object.keys(ridesState);
+                if (keys.length > 0) activeRide = ridesState[keys[keys.length - 1]];
+            }
+
+            if (!activeRide || !activeRide.bids || activeRide.bids.length === 0) {
+                badge.innerText = '0 Bids';
+                if (!activeRide) {
+                    container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">No active request broadcasted yet.</p>`;
+                } else {
+                    container.innerHTML = `
+                        <div class="p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-2xl text-center space-y-1.5 animate-pulse">
+                            <span class="text-xs text-emerald-400 font-mono font-bold">${activeRide.id}</span>
+                            <h4 class="text-sm font-bold text-white">${activeRide.origin.name} ➔ ${activeRide.destination.name}</h4>
+                            <p class="text-xs text-emerald-400 font-mono font-bold">Proposed Offer: PKR ${activeRide.proposed_fare}</p>
+                            <p class="text-[11px] text-slate-400">Broadcasting live to captains across Pakistan... Counter-bids will appear here in real-time.</p>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            badge.innerText = `${activeRide.bids.length} Bids`;
+
+            container.innerHTML = activeRide.bids.map(b => `
+                <div class="p-3.5 bg-slate-950 border border-emerald-900/50 rounded-2xl flex items-center justify-between shadow-md">
+                    <div class="flex items-center space-x-3">
+                        <img src="${b.captain_avatar}" class="w-10 h-10 rounded-full border-2 border-emerald-400 object-cover">
+                        <div>
+                            <h4 class="text-xs font-bold text-white">${b.captain_name} <span class="text-amber-400 text-[10px]">★ ${b.rating}</span></h4>
+                            <p class="text-[10px] text-slate-400">${b.vehicle}</p>
+                            <p class="text-[9px] text-slate-500 font-mono">${b.timestamp.split('T')[1].split('.')[0]}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-black text-emerald-400">PKR ${b.amount}</div>
+                        <button onclick="acceptBid('${activeRide.id}', '${b.id}')" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold px-3 py-1 rounded-xl text-xs mt-1 transition active:scale-95 shadow">
+                            Accept Bid
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCaptainFeed() {
+            const container = document.getElementById('captainFeedList');
+            const rides = Object.values(ridesState).filter(r => r.status === 'SEARCHING');
+
+            if (!rides || rides.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6 col-span-full">No active passenger fare requests in radar feed.</p>`;
+                return;
+            }
+
+            container.innerHTML = rides.map(r => `
+                <div class="p-4 bg-slate-950 border border-amber-900/50 rounded-2xl space-y-3 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-slate-900 pb-2">
+                            <span class="text-xs text-amber-400 font-mono font-bold">${r.id}</span>
+                            <span class="text-[10px] bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800/50 font-semibold">${r.vehicle_category}</span>
+                        </div>
+                        <div class="mt-2 space-y-0.5">
+                            <h4 class="text-sm font-bold text-white">${r.origin.name} ➔ ${r.destination.name}</h4>
+                            <p class="text-xs text-slate-300">Passenger: <span class="font-bold text-white">${r.passenger_name}</span></p>
+                            <div class="text-xs font-mono font-extrabold text-emerald-400">Passenger Offer: PKR ${r.proposed_fare}</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-slate-800 space-y-2">
+                        <label class="text-[10px] text-slate-400 font-medium block">Submit Counter-Bid (PKR)</label>
+                        <div class="flex space-x-2">
+                            <input id="bidInput-${r.id}" type="number" value="${r.proposed_fare}" step="50" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1 text-xs text-emerald-400 font-bold focus:outline-none">
+                            <button onclick="submitCaptainBid('${r.id}')" class="bg-amber-500 hover:bg-amber-400 text-black font-extrabold px-3 py-1 rounded-xl text-xs transition active:scale-95 shrink-0">
+                                Counter-Bid
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showTrackingModal(ride) {
+            activeRideId = ride.id;
+            document.getElementById('modalRideId').innerText = ride.id;
+            document.getElementById('trackingModal').classList.remove('hidden');
+            updateTrackingModalStatus(ride);
+        }
+
+        function updateTrackingModalStatus(ride) {
+            const steps = ['ACCEPTED', 'EN_ROUTE', 'TRIP_STARTED', 'COMPLETED'];
+            const titleMap = {
+                'ACCEPTED': 'Captain Accepted Your Offer!',
+                'EN_ROUTE': 'Captain En Route to Pickup Location',
+                'TRIP_STARTED': 'Trip Started - On the Highway',
+                'COMPLETED': 'Arrived at Destination safely!'
+            };
+
+            document.getElementById('modalStatusTitle').innerText = titleMap[ride.status] || ride.status;
+
+            steps.forEach(st => {
+                const el = document.getElementById(`step-${st}`);
+                if (!el) return;
+                if (st === ride.status) {
+                    el.className = 'p-2 rounded-xl bg-emerald-500 text-black font-bold shadow-md';
+                } else {
+                    el.className = 'p-2 rounded-xl bg-slate-900 text-slate-400 border border-slate-800';
+                }
+            });
+
+            if (ride.accepted_bid) {
+                const b = ride.accepted_bid;
+                document.getElementById('modalCaptainInfo').innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <img src="${b.captain_avatar}" class="w-12 h-12 rounded-full border-2 border-emerald-400 object-cover shadow">
+                        <div>
+                            <h4 class="text-xs font-bold text-white">${b.captain_name}</h4>
+                            <p class="text-[10px] text-slate-400">${b.vehicle} • ★ ${b.rating}</p>
+                            <p class="text-xs text-emerald-400 font-mono font-bold mt-0.5">Agreed Fare: PKR ${b.amount}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function closeTrackingModal() {
+            document.getElementById('trackingModal').classList.add('hidden');
+        }
+
+        let currentUser = null;
+
+        function initUserSession() {
+            const saved = localStorage.getItem('safar_current_user');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    applyUserSession(parsed);
+                    return;
+                } catch(e) {
+                    console.error("Invalid session", e);
+                }
+            }
+            // Default to demo passenger session on fresh load
+            demoLogin('PASSENGER', false);
+        }
+
+        function applyUserSession(user) {
+            currentUser = user;
+            currentRole = user.role;
+            localStorage.setItem('safar_current_user', JSON.stringify(user));
+
+            // Update Top Header Profile
+            const loginBtn = document.getElementById('loginTriggerBtn');
+            const profilePill = document.getElementById('userProfilePill');
+            const nameEl = document.getElementById('headerUserName');
+            const roleEl = document.getElementById('headerUserRole');
+            const avatarEl = document.getElementById('headerUserAvatar');
+
+            if (loginBtn) loginBtn.classList.add('hidden');
+            if (profilePill) profilePill.classList.remove('hidden');
+            if (nameEl) nameEl.innerText = user.name;
+            if (roleEl) {
+                roleEl.innerText = user.role;
+                roleEl.className = user.role === 'PASSENGER' ? 'text-[10px] text-emerald-400 font-mono font-semibold' : 'text-[10px] text-amber-400 font-mono font-semibold';
+            }
+            if (avatarEl && user.avatar) avatarEl.src = user.avatar;
+
+            // Update Dropdown Contents
+            const dropAvatar = document.getElementById('dropUserAvatar');
+            const dropName = document.getElementById('dropUserName');
+            const dropPhone = document.getElementById('dropUserPhone');
+            const dropBadge = document.getElementById('dropUserBadge');
+            const dropCapt = document.getElementById('dropCaptainDetails');
+
+            if (dropAvatar && user.avatar) dropAvatar.src = user.avatar;
+            if (dropName) dropName.innerText = user.name;
+            if (dropPhone) dropPhone.innerText = user.phone;
+            if (dropBadge) {
+                dropBadge.innerText = user.role;
+                dropBadge.className = user.role === 'PASSENGER'
+                    ? 'inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-full mt-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                    : 'inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-full mt-1 bg-amber-500/20 text-amber-400 border border-amber-500/30';
+            }
+
+            if (user.role === 'CAPTAIN') {
+                if (dropCapt) dropCapt.classList.remove('hidden');
+                const veh = document.getElementById('dropVehicleName');
+                const plt = document.getElementById('dropPlateNumber');
+                const rat = document.getElementById('dropCaptainRating');
+                if (veh) veh.innerText = user.vehicle || 'Toyota Corolla';
+                if (plt) plt.innerText = user.plate_number || 'LEA-2024';
+                if (rat) rat.innerText = '★ ' + (user.rating || 4.90).toFixed(2);
+            } else {
+                if (dropCapt) dropCapt.classList.add('hidden');
+            }
+
+            // Role Portal Locking: Show ONLY the active role's dedicated portal
+            const headerBadge = document.getElementById('roleHeaderBadge');
+            const subnavPass = document.getElementById('subnav-PASSENGER');
+            const subnavCapt = document.getElementById('subnav-CAPTAIN');
+
+            if (user.role === 'PASSENGER') {
+                if (headerBadge) {
+                    headerBadge.innerText = 'PASSENGER';
+                    headerBadge.className = 'text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-0.5 rounded-full font-mono font-bold';
+                }
+                if (subnavPass) subnavPass.classList.remove('hidden');
+                if (subnavCapt) subnavCapt.classList.add('hidden');
+                switchAppTab('PASSENGER-BOOK');
+            } else if (user.role === 'CAPTAIN') {
+                if (headerBadge) {
+                    headerBadge.innerText = 'CAPTAIN';
+                    headerBadge.className = 'text-xs bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-0.5 rounded-full font-mono font-bold';
+                }
+                if (subnavCapt) subnavCapt.classList.remove('hidden');
+                if (subnavPass) subnavPass.classList.add('hidden');
+                switchAppTab('CAPTAIN-POST');
+            }
+        }
+
+        function toggleProfileDropdown() {
+            const drop = document.getElementById('profileDropdown');
+            if (drop) drop.classList.toggle('hidden');
+        }
+
+        function openAuthModal(mode = 'LOGIN') {
+            document.getElementById('authModal').classList.remove('hidden');
+            switchAuthMode(mode);
+        }
+
+        function closeAuthModal() {
+            if (!currentUser) return;
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        function switchAuthMode(mode) {
+            const loginTab = document.getElementById('authTabLogin');
+            const signupTab = document.getElementById('authTabSignup');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const quickDemo = document.getElementById('quickDemoSection');
+
+            if (mode === 'LOGIN') {
+                loginTab.className = 'py-2 rounded-lg transition bg-emerald-500 text-black shadow font-bold';
+                signupTab.className = 'py-2 rounded-lg transition text-slate-400 hover:text-white font-bold';
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                quickDemo.classList.remove('hidden');
+            } else {
+                signupTab.className = 'py-2 rounded-lg transition bg-emerald-500 text-black shadow font-bold';
+                loginTab.className = 'py-2 rounded-lg transition text-slate-400 hover:text-white font-bold';
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                quickDemo.classList.add('hidden');
+            }
+        }
+
+        function toggleSignupFields(role) {
+            const captFields = document.getElementById('signupCaptainFields');
+            const submitBtn = document.getElementById('signupSubmitBtn');
+            const signupTab = document.getElementById('authTabSignup');
+
+            if (role === 'CAPTAIN') {
+                captFields.classList.remove('hidden');
+                submitBtn.className = 'w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition active:scale-95 shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2';
+                signupTab.className = 'py-2 rounded-lg transition bg-amber-500 text-black shadow font-bold';
+            } else {
+                captFields.classList.add('hidden');
+                submitBtn.className = 'w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs transition active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2';
+                signupTab.className = 'py-2 rounded-lg transition bg-emerald-500 text-black shadow font-bold';
+            }
+        }
+
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            const errEl = document.getElementById('loginError');
+            errEl.classList.add('hidden');
+
+            const identifier = document.getElementById('loginIdentifier').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier, password })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    errEl.innerText = data.detail || 'Login failed';
+                    errEl.classList.remove('hidden');
+                    return;
+                }
+                applyUserSession(data.user);
+                closeAuthModal();
+                showToast(`Signed in as ${data.user.name} (${data.user.role})`, 'fa-check');
+            } catch(e) {
+                errEl.innerText = 'Network error during login';
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        async function handleSignupSubmit(event) {
+            event.preventDefault();
+            const errEl = document.getElementById('signupError');
+            errEl.classList.add('hidden');
+
+            const role = document.querySelector('input[name="signupRole"]:checked').value;
+            const name = document.getElementById('signupName').value;
+            const city = document.getElementById('signupCity').value;
+            const phone = document.getElementById('signupPhone').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            const payload = { role, name, city, phone, email, password };
+            if (role === 'CAPTAIN') {
+                payload.vehicle = document.getElementById('signupVehicle').value || 'Toyota Corolla';
+                payload.plate_number = document.getElementById('signupPlate').value || 'LEA-2024';
+                payload.cnic = document.getElementById('signupCnic').value || '35201-1234567-1';
+            }
+
+            try {
+                const res = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    errEl.innerText = data.detail || 'Registration failed';
+                    errEl.classList.remove('hidden');
+                    return;
+                }
+                applyUserSession(data.user);
+                closeAuthModal();
+                showToast(`Account Created! Welcome ${data.user.name}`, 'fa-check-circle');
+            } catch(e) {
+                errEl.innerText = 'Network error during signup';
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        async function demoLogin(role, toast = true) {
+            const identifier = role === 'CAPTAIN' ? 'captain@safar.pk' : 'passenger@safar.pk';
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier, password: 'password123' })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    applyUserSession(data.user);
+                    closeAuthModal();
+                    if (toast) {
+                        showToast(`Logged in as ${data.user.name} (${data.user.role})`, 'fa-check');
+                    }
+                }
+            } catch(e) {
+                console.error("Demo login error", e);
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('safar_current_user');
+            currentUser = null;
+            document.getElementById('profileDropdown').classList.add('hidden');
+            document.getElementById('userProfilePill').classList.add('hidden');
+            document.getElementById('loginTriggerBtn').classList.remove('hidden');
+            openAuthModal('LOGIN');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const drop = document.getElementById('profileDropdown');
+            const pill = document.getElementById('userProfilePill');
+            if (drop && !drop.classList.contains('hidden')) {
+                if (!drop.contains(e.target) && !pill.contains(e.target)) {
+                    drop.classList.add('hidden');
+                }
+            }
+        });
+
+        function switchAppTab(tabId) {
+            activeTab = tabId;
+            document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
+            
+            const targetPage = document.getElementById(`tab-${tabId}`);
+            if (targetPage) targetPage.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.className = 'nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-900 border border-transparent';
+            });
+
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                const colorClass = tabId.startsWith('PASSENGER') ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+                activeNav.className = `nav-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 ${colorClass}`;
+            }
+        }
+
+        function switchServiceModule(modId) {
+            activeModule = modId;
+            const modules = ['INTERCITY', 'INTRACITY', 'OFFICE', 'COMMUNITY'];
+
+            modules.forEach(m => {
+                const modEl = document.getElementById(`module-${m}`);
+                const btnEl = document.getElementById(`svc-${m}`);
+                const mBtnEl = document.getElementById(`m-svc-${m}`);
+
+                if (m === modId) {
+                    if (modEl) modEl.classList.remove('hidden');
+                    if (btnEl) btnEl.className = 'svc-tab-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-emerald-500 text-black shadow-md';
+                    if (mBtnEl) mBtnEl.className = 'px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-emerald-500 text-black';
+                } else {
+                    if (modEl) modEl.classList.add('hidden');
+                    if (btnEl) btnEl.className = 'svc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center space-x-2 hover:bg-slate-800';
+                    if (mBtnEl) mBtnEl.className = 'px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300';
+                }
+            });
+        }
+
+        let currentTheme = localStorage.getItem('safar_theme') || 'light';
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('safar_theme', theme);
+            const htmlEl = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const btn = document.getElementById('themeToggleBtn');
+
+            if (theme === 'dark') {
+                htmlEl.classList.add('dark');
+                htmlEl.classList.remove('light');
+                if (icon) {
+                    icon.className = 'fas fa-sun text-amber-400';
+                }
+                if (btn) {
+                    btn.title = 'Switch to Light Mode';
+                }
+            } else {
+                htmlEl.classList.remove('dark');
+                htmlEl.classList.add('light');
+                if (icon) {
+                    icon.className = 'fas fa-moon text-indigo-500';
+                }
+                if (btn) {
+                    btn.title = 'Switch to Dark Mode';
+                }
+            }
+        }
+
+        function toggleTheme() {
+            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
+            showToast(nextTheme === 'dark' ? 'Dark Mode Activated' : 'Light Mode Activated', nextTheme === 'dark' ? 'fa-moon' : 'fa-sun');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            applyTheme(currentTheme);
+            connectWebSocket();
+            initUserSession();
+        });
+    </script>
+</body>
+</html>
